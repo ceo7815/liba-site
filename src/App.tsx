@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import AccessibilityWidget from "@/components/AccessibilityWidget";
+import SocialButtons from "@/components/SocialButtons";
 import ScrollToTop from "@/components/ScrollToTop";
 import { lazy, Suspense, useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -26,7 +27,6 @@ const ReviewsPage = lazy(() => import("./pages/ReviewsPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const BlogPage = lazy(() => import("./pages/BlogPage"));
 const BlogArticlePage = lazy(() => import("./pages/BlogArticlePage"));
-const ScannerPage = lazy(() => import("./pages/ScannerPage"));
 const ServiceHubPage = lazy(() => import("./pages/ServiceHubPage"));
 const ServiceDetailPage = lazy(() => import("./pages/ServiceDetailPage"));
 const ThankYouPage = lazy(() => import("./pages/ThankYouPage"));
@@ -96,7 +96,7 @@ const App = () => (
                   <Route path="/blog" element={<BlogPage />} />
                   <Route path="/blog/:category" element={<BlogPage />} />
                   <Route path="/blog/:category/:slug" element={<BlogArticlePage />} />
-                  <Route path="/tools/insurance-scan" element={<ScannerPage />} />
+                  <Route path="/tools/insurance-scan" element={<Navigate to="/insurance-check" replace />} />
                   <Route path="/services/:hubSlug" element={<ServiceHubPage />} />
                   <Route path="/services/:hubSlug/:slug" element={<ServiceDetailPage />} />
                   <Route path="/privacy-policy" element={<PrivacyPage />} />
@@ -108,6 +108,7 @@ const App = () => (
                 <Footer />
                 <CookieConsent />
                 <AccessibilityWidget />
+                <SocialButtons layout="dock" />
               </>
             } />
           </Routes>

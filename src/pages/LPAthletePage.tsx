@@ -15,7 +15,7 @@ import AthleteMarquee from "@/components/athlete/AthleteMarquee";
 import AthleteEKG from "@/components/athlete/AthleteEKG";
 import { captureUtmFromUrl } from "@/lib/utm";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
-import libaLogo from "@/assets/logo.png";
+import libaLogo from "@/assets/logo-light.png";
 
 const TARGET_FORM_ID = "athlete-form-primary";
 
@@ -40,7 +40,7 @@ const TopBar = () => (
         <img
           src={libaLogo}
           alt="ליבה ביטוח ופנסיוני"
-          className="h-9 md:h-10 w-auto athlete-logo-white"
+          className="h-9 md:h-10 w-auto"
         />
         <span className="hidden sm:block text-[11px] md:text-xs text-[hsl(var(--athlete-muted))] leading-tight border-r border-[hsl(var(--athlete-border))] pr-3">
           סוכנות ביטוח <br />

@@ -1,14 +1,15 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   Heart, Shield, Home, Plane, Brain, TrendingUp,
   FileSearch, CheckCircle, Star, ArrowLeft, Landmark, Scale,
-  Sparkles, Users, Clock, Award
+  Users, Clock, Award
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import InsuranceLogos from "@/components/InsuranceLogos";
 import LeadForm from "@/components/LeadForm";
 import FAQSection from "@/components/FAQSection";
+import SectionTitle from "@/components/SectionTitle";
 import SectionDivider from "@/components/SectionDivider";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { testimonials } from "@/data/testimonials";
@@ -20,23 +21,25 @@ const fadeUp = {
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5 } }),
 };
 
-const SectionTitle = ({ title, subtitle, accent, light }: { title: string; subtitle?: string; accent?: string; light?: boolean }) => (
-  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center max-w-2xl mx-auto mb-12">
-    <h2 className={`font-heading text-3xl md:text-4xl font-black mb-3 ${light ? 'text-primary-foreground' : ''}`}>
-      {accent ? (
-        <>
-          {title.split(accent)[0]}
-          <span className="text-gradient-accent">{accent}</span>
-          {title.split(accent)[1]}
-        </>
-      ) : title}
-    </h2>
-    {subtitle && <p className={`text-lg leading-relaxed ${light ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{subtitle}</p>}
-  </motion.div>
-);
+const heroEnter = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.16, delayChildren: 0.2 },
+  },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 const HomePage = () => {
   const featuredArticles = blogArticles.slice(0, 4);
+  const reduceMotion = useReducedMotion();
 
   return (
     <main id="main-content">
@@ -52,7 +55,7 @@ const HomePage = () => {
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroBg} alt="יועץ ביטוח ופנסיוני – בדיקת תיק ביטוח ופיננסים למשפחה" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-l from-[hsl(205,65%,12%)] via-[hsl(205,65%,15%,0.92)] to-[hsl(205,65%,18%,0.75)]" />
+          <div className="absolute inset-0 bg-gradient-to-l from-[hsl(205,65%,12%,0.82)] via-[hsl(205,65%,15%,0.66)] to-[hsl(205,65%,18%,0.41)]" />
         </div>
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[10%] left-[3%] w-80 h-80 rounded-full border-2 border-dashed border-brand-teal/20 animate-spin-slow" />
@@ -60,8 +63,6 @@ const HomePage = () => {
           <div className="absolute top-[20%] left-[8%] w-40 h-40 rounded-full bg-gradient-to-br from-brand-teal/20 to-transparent animate-float blur-xl" />
           <div className="absolute bottom-[15%] right-[5%] w-56 h-56 rounded-full bg-gradient-to-br from-accent/15 to-transparent animate-float-slow blur-xl" />
           <div className="absolute top-[55%] left-[20%] w-24 h-24 rounded-full bg-brand-gold/10 animate-float blur-lg" />
-          <div className="absolute top-[30%] right-[12%] w-16 h-16 border-2 border-primary-foreground/10 rotate-45 animate-float-slow" />
-          <div className="absolute bottom-[30%] left-[15%] w-12 h-12 border-2 border-brand-teal/15 rotate-12 animate-float" />
           <div className="absolute top-[40%] right-[3%] w-32 h-32 opacity-20" style={{
             backgroundImage: 'radial-gradient(circle, hsl(var(--primary-foreground) / 0.3) 1px, transparent 1px)',
             backgroundSize: '12px 12px'
@@ -69,38 +70,49 @@ const HomePage = () => {
         </div>
 
         <div className="relative container mx-auto px-4 py-32">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-2xl">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }} 
-              animate={{ opacity: 1, x: 0 }} 
-              transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-teal/20 border border-brand-teal/30 text-brand-teal mb-6 text-sm font-medium"
+          <motion.div
+            className="mx-auto max-w-3xl text-center"
+            variants={heroEnter}
+            initial={reduceMotion ? false : "hidden"}
+            animate="visible"
+          >
+            <motion.h1
+              variants={heroItem}
+              className="font-heading text-4xl md:text-5xl lg:text-6xl font-black text-primary-foreground leading-tight mb-6"
             >
-              <Sparkles className="w-4 h-4" />
-              ליווי ביטוחי ופיננסי חכם
-            </motion.div>
-
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-black text-primary-foreground leading-tight mb-6">
-              ליווי ביטוחי ופיננסי —{" "}
-              <span className="text-accent">סדר שעושה</span>{" "}
+              ליווי ביטוחי ופיננסי -{" "}
+              <span className="text-accent">עושים סדר</span>{" "}
               בכיסוי, בתנאים ובכסף
-            </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/80 mb-4 leading-relaxed">
+            </motion.h1>
+            <motion.p
+              variants={heroItem}
+              className="text-lg md:text-xl text-primary-foreground/80 mb-4 leading-relaxed"
+            >
               אנחנו מלווים משפחות ואנשים בבניית תיק ביטוח ופיננסים מדויק: שקוף, מותאם למציאות החיים, ומבוסס בדיקה — לא תחושות.
-            </p>
-            <div className="flex flex-wrap items-center gap-3 text-sm text-primary-foreground/60 mb-8">
+            </motion.p>
+            <motion.div
+              variants={heroItem}
+              className="flex flex-wrap items-center justify-center gap-3 text-sm text-primary-foreground/60 mb-8"
+            >
               <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-brand-teal" />שפה פשוטה</span>
               <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-brand-teal" />שקיפות מלאה</span>
               <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-brand-teal" />עובדים מול כל החברות</span>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="bg-accent text-accent-foreground px-8 py-3.5 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg hover:shadow-accent/30 animate-pulse-glow">
+            </motion.div>
+            <motion.div variants={heroItem} className="flex flex-wrap justify-center gap-4">
+              <Link to="/contact" className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-3.5 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg hover:shadow-accent/30 animate-pulse-glow">
                 קבעו שיחת היכרות
+                <span className="emoji-click text-xl leading-none" style={{ filter: "brightness(0) invert(1)" }} aria-hidden>👆</span>
               </Link>
-              <Link to="/tools/insurance-scan" className="bg-primary-foreground/10 border-2 border-primary-foreground/20 text-primary-foreground px-8 py-3.5 rounded-full font-bold text-lg hover:bg-primary-foreground/20 transition-all backdrop-blur-sm">
-                הפעילו את סורק הביטוח האישי
-              </Link>
-            </div>
+              <div className="nav-float-rim inline-block rounded-full p-[3px]">
+                <Link
+                  to="/insurance-check"
+                  className="relative flex items-center justify-center gap-2 rounded-full bg-[hsl(205,65%,12%)] px-8 py-3.5 font-bold text-lg text-primary-foreground hover:brightness-110 transition-all"
+                >
+                  סורק הביטוח האישי
+                  <span className="emoji-click text-xl leading-none" style={{ filter: "brightness(0) invert(1)" }} aria-hidden>👆</span>
+                </Link>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -109,21 +121,23 @@ const HomePage = () => {
       <section className="section-padding section-gradient-mesh relative">
         <div className="absolute inset-0 dot-pattern opacity-40" />
         <div className="container mx-auto relative">
-          <SectionTitle title="מה אנחנו עושים בפועל?" accent="בפועל" subtitle="אנחנו לא מתחילים ממוצר. מתחילים מבדיקה: מה יש היום, מה כפול, מה חסר ומה אפשר לשפר." />
+          <SectionTitle eyebrow="01 · בדיקה" title="מה אנחנו עושים בפועל?" accent="בפועל" subtitle="אנחנו לא מתחילים ממוצר. מתחילים מבדיקה: מה יש היום, מה כפול, מה חסר ומה אפשר לשפר." />
           <div className="grid md:grid-cols-3 gap-8">
             {whatWeDo.map((card, i) => (
               <motion.div key={card.title} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={i}
-                className="relative group">
-                <div className="glass-premium p-8 text-center hover:glow-teal transition-all duration-500 relative overflow-hidden">
-                  <div className="absolute -top-4 -left-4 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-500">
-                    <div className="w-32 h-32">{card.bgIcon}</div>
-                  </div>
-                  <div className="relative">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-teal/20 to-brand-teal/5 text-brand-teal mb-5 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-brand-teal/20 transition-all duration-300">
-                      {card.icon}
+                className="relative group h-full">
+                <div className="nav-float-rim rim-edge-only h-full rounded-[26px] p-[3px]">
+                  <div className="relative h-full overflow-hidden rounded-[23px] bg-[hsl(var(--popover))] p-8 text-center">
+                    <div className="absolute -top-4 -left-4 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-500">
+                      <div className="w-32 h-32">{card.bgIcon}</div>
                     </div>
-                    <h3 className="font-heading text-xl font-bold mb-3">{card.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{card.desc}</p>
+                    <div className="relative">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-teal/20 to-brand-teal/5 text-brand-teal mb-5 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-brand-teal/20 transition-all duration-300">
+                        {card.icon}
+                      </div>
+                      <h3 className="font-heading text-xl font-bold mb-3">{card.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed">{card.desc}</p>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -152,7 +166,7 @@ const HomePage = () => {
           <div className="absolute bottom-[10%] right-[10%] w-64 h-64 rounded-full bg-accent/10 blur-[100px]" />
         </div>
         <div className="container mx-auto relative">
-          <SectionTitle title="תחומי שירות" subtitle="בחרו תחום שירות וקראו מה כולל התהליך, למי מתאים, ואיך מתחילים." light />
+          <SectionTitle eyebrow="02 · שירותים" title="תחומי שירות" subtitle="בחרו תחום שירות וקראו מה כולל התהליך, למי מתאים, ואיך מתחילים." light />
           {/* Mobile: 3-col grid | Desktop: 4-col */}
           <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
             {services.map((service, i) => (
@@ -188,64 +202,62 @@ const HomePage = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background/95" />
         </div>
         <div className="container mx-auto relative">
-          <SectionTitle title="למה ליבה?" accent="ליבה" subtitle="ליבה ביטוח ופנסיוני היא חברת ליווי ביטוחי-פיננסי שמטרתה אחת: לגרום לתיק שלכם להיות ברור, מותאם ומבוקר." />
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }} 
-              whileInView={{ opacity: 1, x: 0 }} 
+          <SectionTitle eyebrow="03 · החברה" title="למה ליבה?" accent="ליבה" subtitle="ליבה ביטוח ופנסיוני היא חברת ליווי ביטוחי-פיננסי שמטרתה אחת: לגרום לתיק שלכם להיות ברור, מותאם ומבוקר." />
+          <div className="mx-auto max-w-4xl text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="space-y-6"
+              className="space-y-8"
             >
               <p className="text-lg text-muted-foreground leading-relaxed">
                 הגישה שלנו: קודם להבין → אחר כך להמליץ → ואז ליישם בצורה נקייה ושקופה.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {aboutPoints.map((point, i) => (
-                  <motion.div 
-                    key={point.title} 
+                  <motion.div
+                    key={point.title}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex items-start gap-3 p-4 rounded-xl bg-card/80 backdrop-blur-sm border border-border/30"
+                    className="h-full"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-brand-teal/15 text-brand-teal flex items-center justify-center flex-shrink-0 mt-0.5">
-                      {point.icon}
-                    </div>
-                    <div>
-                      <p className="font-bold text-sm">{point.title}</p>
-                      <p className="text-xs text-muted-foreground">{point.desc}</p>
+                    <div className="nav-float-rim rim-edge-only h-full rounded-[16px] p-[3px]">
+                      <div className="flex h-full flex-col items-center gap-3 rounded-[13px] bg-[hsl(var(--popover))] p-5 text-center">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-teal/15 text-brand-teal">
+                          {point.icon}
+                        </div>
+                        <div>
+                          <p className="font-bold text-sm">{point.title}</p>
+                          <p className="mt-1 text-xs text-muted-foreground">{point.desc}</p>
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
-              <Link to="/about" className="inline-flex items-center gap-2 text-accent font-bold hover:gap-3 transition-all">
+              <Link to="/about" className="inline-flex items-center justify-center gap-2 text-accent font-bold hover:gap-3 transition-all">
                 עוד עלינו <ArrowLeft className="w-4 h-4" />
               </Link>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }} 
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="grid grid-cols-3 gap-2 md:gap-4"
-            >
-              {[
-                { target: 15, suffix: "+", label: "שנות ניסיון", gradient: "from-brand-teal/20 to-brand-teal/5" },
-                { target: 1000, suffix: "+", label: "משפחות מלוות", gradient: "from-accent/20 to-accent/5" },
-                { target: 100, suffix: "%", label: "שקיפות מלאה", gradient: "from-brand-gold/20 to-brand-gold/5" },
-              ].map((counter, i) => (
-                <div key={i} className={`glass-premium p-3 md:p-6 bg-gradient-to-br ${counter.gradient}`}>
-                  <AnimatedCounter target={counter.target} suffix={counter.suffix} label={counter.label} />
-                </div>
-              ))}
+              <div className="grid grid-cols-3 gap-2 md:gap-4 pt-2">
+                {[
+                  { target: 15, suffix: "+", label: "שנות ניסיון", gradient: "from-brand-teal/20 to-brand-teal/5" },
+                  { target: 1000, suffix: "+", label: "משפחות מלוות", gradient: "from-accent/20 to-accent/5" },
+                  { target: 100, suffix: "%", label: "שקיפות מלאה", gradient: "from-brand-gold/20 to-brand-gold/5" },
+                ].map((counter, i) => (
+                  <div key={i} className={`glass-premium p-3 md:p-6 bg-gradient-to-br ${counter.gradient}`}>
+                    <AnimatedCounter target={counter.target} suffix={counter.suffix} label={counter.label} />
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* 5. Insurance Logos */}
-      <InsuranceLogos />
+      <InsuranceLogos eyebrow="04 · שותפים" />
 
       {/* Divider */}
       <SectionDivider variant="curve" className="text-primary -mb-1" />
@@ -268,16 +280,14 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="max-w-2xl mx-auto"
           >
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-accent/30 to-brand-teal/20 text-accent mb-6 animate-pulse-glow">
-              <FileSearch className="w-10 h-10" />
-            </div>
-            <h2 className="font-heading text-3xl md:text-4xl font-black text-primary-foreground mb-4">
-              סורק <span className="text-accent">ביטוח אישי</span>
-            </h2>
-            <p className="text-primary-foreground/70 text-lg mb-8 leading-relaxed">
-              ב-90 שניות תקבלו תמונת מצב ראשונית: האם אתם מוגנים כמו שאתם חושבים — והאם יש סיכוי לתשלום מיותר/כפול.
-            </p>
-            <Link to="/tools/insurance-scan" className="bg-accent text-accent-foreground px-10 py-4 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-xl hover:shadow-accent/30 inline-block animate-pulse-glow">
+            <SectionTitle
+              eyebrow="05 · סורק"
+              title="סורק ביטוח אישי"
+              accent="ביטוח אישי"
+              subtitle="ב-90 שניות תקבלו תמונת מצב ראשונית: האם אתם מוגנים כמו שאתם חושבים — והאם יש סיכוי לתשלום מיותר/כפול."
+              light
+            />
+            <Link to="/insurance-check" className="bg-accent text-accent-foreground px-10 py-4 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-xl hover:shadow-accent/30 inline-block animate-pulse-glow">
               התחילו סריקה עכשיו
             </Link>
           </motion.div>
@@ -289,7 +299,7 @@ const HomePage = () => {
       {/* 7. Testimonials — horizontal scroll */}
       <section className="section-padding section-gradient-mesh relative overflow-hidden">
         <div className="container mx-auto relative">
-          <SectionTitle title="לקוחות מספרים" accent="מספרים" />
+          <SectionTitle eyebrow="06 · לקוחות" title="לקוחות מספרים" accent="מספרים" />
         </div>
         <div className="relative">
           {/* Fade edges */}
@@ -336,7 +346,7 @@ const HomePage = () => {
           <div className="absolute top-[20%] right-[5%] w-96 h-96 rounded-full bg-accent/8 blur-[150px]" />
         </div>
         <div className="container mx-auto relative">
-          <SectionTitle title="מדריכים וכלים" subtitle="תוכן פרקטי שמסביר מה לבדוק, מתי לבדוק, ואיך להימנע מטעויות יקרות." light />
+          <SectionTitle eyebrow="07 · ידע" title="מדריכים וכלים" subtitle="תוכן פרקטי שמסביר מה לבדוק, מתי לבדוק, ואיך להימנע מטעויות יקרות." light />
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredArticles.map((post, i) => (
               <motion.div key={post.slug} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={i}>
@@ -371,7 +381,7 @@ const HomePage = () => {
       <SectionDivider variant="slant" className="text-background -mt-1" />
 
       {/* 9. FAQ */}
-      <FAQSection items={faqs} />
+      <FAQSection eyebrow="08 · שאלות" items={faqs} />
 
       {/* 10. Lead Form */}
       <section className="relative section-padding overflow-hidden">

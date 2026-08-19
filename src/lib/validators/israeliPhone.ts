@@ -72,3 +72,14 @@ export const isValidIsraeliPhone = (raw: string): boolean => {
 
   return true;
 };
+
+export const MOBILE_PHONE_ERROR =
+  "לאימות ב-SMS נדרש מספר נייד ישראלי (לדוגמה 050-1234567).";
+
+/** OTP/SMS can only be delivered to Israeli mobiles (05X). */
+export const isValidIsraeliMobile = (raw: string): boolean => {
+  const p = normalizeIsraeliPhone(raw);
+  if (p.length !== 10) return false;
+  if (!VALID_MOBILE_PREFIXES.includes(p.slice(0, 3))) return false;
+  return isValidIsraeliPhone(raw);
+};

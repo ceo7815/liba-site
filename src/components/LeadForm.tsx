@@ -4,9 +4,10 @@ import { motion } from "framer-motion";
 import { Send, CheckCircle, Loader2 } from "lucide-react";
 import { siteConfig, statusOptions, timeOptions, topicOptions, purposeOptions, servicesMenu } from "@/data/siteConfig";
 import { useToast } from "@/hooks/use-toast";
-import { isValidIsraeliPhone, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
+import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 import { markLeadPending } from "@/lib/fbq";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 // Flatten all services from servicesMenu for the dropdown
 const allServices = servicesMenu.flatMap((group) =>
@@ -42,6 +43,7 @@ const LeadForm = ({
   const formStartedAt = useRef(Date.now());
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { confirmPhone, otpDialog } = usePhoneOtp();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -66,8 +68,8 @@ const LeadForm = ({
     // Timing trap
     if (Date.now() - formStartedAt.current < 3000) return;
 
-    if (!isValidIsraeliPhone(formData.phone)) {
-      setPhoneError("מספר טלפון לא תקין. אנא הזינו מספר ישראלי תקין (לדוגמה 050-1234567).");
+    if (!isValidIsraeliMobile(formData.phone)) {
+      setPhoneError(MOBILE_PHONE_ERROR);
       return;
     }
 
@@ -90,8 +92,12 @@ const LeadForm = ({
     setSending(true);
 
     try {
-      backupLead(source, payload);
-      await postLeadWebhooks(WEBHOOK_URL, payload);
+      const verified = await confirmPhone(formData.phone);
+      if (!verified) return;
+
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: true };
+      backupLead(source, verifiedPayload);
+      await postLeadWebhooks(WEBHOOK_URL, verifiedPayload);
 
       setSubmitted(true);
       markLeadPending();
@@ -118,8 +124,8 @@ const LeadForm = ({
     update("phone", cleaned);
   };
   const handlePhoneBlur = () => {
-    if (formData.phone && !isValidIsraeliPhone(formData.phone)) {
-      setPhoneError("מספר טלפון לא תקין. אנא הזינו מספר ישראלי תקין (לדוגמה 050-1234567).");
+    if (formData.phone && !isValidIsraeliMobile(formData.phone)) {
+      setPhoneError(MOBILE_PHONE_ERROR);
     }
   };
 
@@ -222,6 +228,7 @@ const LeadForm = ({
 
       <p className="text-xs text-muted-foreground text-center mt-4">אנחנו חוזרים רק לגבי הפנייה שלכם. בלי ספאם.</p>
       <p className="text-[10px] text-muted-foreground/60 text-center mt-1">המידע באתר כללי ואינו מהווה ייעוץ אישי. התאמה נעשית לאחר בדיקה.</p>
+      {otpDialog}
     </div>
   );
 };

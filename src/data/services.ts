@@ -67,7 +67,7 @@ export const serviceHubs: Record<string, ServiceHub> = {
       subtitle: "השאירו פרטים ונחזור לשיחת היכרות קצרה — להבין מה יש היום ומה כדאי לבדוק.",
     },
     relatedLinks: [
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
       { label: "פנסיה ופרישה", href: "/services/retirement" },
       { label: "פיננסי ומימון", href: "/services/finance" },
       { label: "מדריכים וכלים", href: "/blog" },
@@ -110,7 +110,7 @@ export const serviceHubs: Record<string, ServiceHub> = {
     relatedLinks: [
       { label: "ביטוחים למשפחה", href: "/services/family-insurance" },
       { label: "פיננסי ומימון", href: "/services/finance" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
     ],
   },
 
@@ -150,7 +150,7 @@ export const serviceHubs: Record<string, ServiceHub> = {
     relatedLinks: [
       { label: "פנסיה ופרישה", href: "/services/retirement" },
       { label: "ביטוחים למשפחה", href: "/services/family-insurance" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
     ],
   },
 
@@ -263,7 +263,7 @@ export const serviceDetails: Record<string, ServiceDetail> = {
     relatedLinks: [
       { label: "ביטוחים למשפחה", href: "/services/family-insurance" },
       { label: "ביטוח מחלות קשות", href: "/services/family-insurance/critical-illness" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
       { label: "צור קשר", href: "/contact" },
     ],
   },

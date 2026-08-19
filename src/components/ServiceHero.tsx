@@ -50,7 +50,7 @@ const ServiceHero = ({ title, subtitle, trustLine, heroImage, imageAlt }: Servic
               קבעו שיחת היכרות
             </Link>
             <Link
-              to="/tools/insurance-scan"
+              to="/insurance-check"
               className="bg-primary-foreground/10 text-primary-foreground border border-primary-foreground/20 px-7 py-3 rounded-full font-bold hover:bg-primary-foreground/20 transition-colors"
             >
               סורק הביטוח האישי (90 שניות)

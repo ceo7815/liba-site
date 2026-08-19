@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Send } from "lucide-react";
-import { isValidIsraeliPhone, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
+import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 import { captureUtmFromUrl, getStoredUtm } from "@/lib/utm";
 import { useToast } from "@/hooks/use-toast";
 import { markLeadPending } from "@/lib/fbq";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 export const ATHLETE_WEBHOOK_URL = "https://hook.eu2.make.com/xiuzt4eufe8bru8k070xtkye4na21w38";
 
@@ -50,6 +51,7 @@ const checkRateLimit = (): boolean => {
 const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFormProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { confirmPhone, otpDialog } = usePhoneOtp();
   const formStartedAt = useRef(Date.now());
   const [sending, setSending] = useState(false);
   const [phoneError, setPhoneError] = useState<string | null>(null);
@@ -79,8 +81,8 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
   };
 
   const handlePhoneBlur = () => {
-    if (data.phone && !isValidIsraeliPhone(data.phone)) {
-      setPhoneError("צריך מספר טלפון ישראלי תקין כדי שנוכל לחזור אליך.");
+    if (data.phone && !isValidIsraeliMobile(data.phone)) {
+      setPhoneError(MOBILE_PHONE_ERROR);
     }
   };
 
@@ -90,8 +92,8 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
     if (!name || name.length < 2) e.fullName = "צריך למלא שם מלא כדי שנדע למי לחזור.";
     if (!/[א-תA-Za-z]/.test(name)) e.fullName = "השם חייב להכיל אותיות בלבד.";
 
-    if (!isValidIsraeliPhone(data.phone)) {
-      setPhoneError("צריך מספר טלפון ישראלי תקין כדי שנוכל לחזור אליך.");
+    if (!isValidIsraeliMobile(data.phone)) {
+      setPhoneError(MOBILE_PHONE_ERROR);
       e.phone = "phone";
     }
     const ageNum = parseInt(data.age, 10);
@@ -108,15 +110,6 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
     if (data.website) return; // honeypot tripped
     if (Date.now() - formStartedAt.current < 3000) return; // time trap
     if (!validate()) return;
-
-    if (!checkRateLimit()) {
-      toast({
-        title: "יותר מדי ניסיונות",
-        description: "נסה שוב בעוד מספר דקות.",
-        variant: "destructive",
-      });
-      return;
-    }
 
     const utm = getStoredUtm();
     const payload = {
@@ -139,8 +132,19 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
 
     setSending(true);
     try {
-      backupLead("athlete-pack", payload);
-      await postLeadWebhooks(ATHLETE_WEBHOOK_URL, payload);
+      const verified = await confirmPhone(data.phone);
+      if (!verified) return;
+      if (!checkRateLimit()) {
+        toast({
+          title: "יותר מדי ניסיונות",
+          description: "נסה שוב בעוד מספר דקות.",
+          variant: "destructive",
+        });
+        return;
+      }
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: true };
+      backupLead("athlete-pack", verifiedPayload);
+      await postLeadWebhooks(ATHLETE_WEBHOOK_URL, verifiedPayload);
       markLeadPending();
       navigate("/athlete-thankyou");
     } catch (err) {
@@ -156,6 +160,7 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
   };
 
   return (
+    <>
     <form id={formId} onSubmit={handleSubmit} className="space-y-3" noValidate>
       {/* Honeypot */}
       <input
@@ -255,6 +260,8 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
         השארת פרטים אינה מחייבת רכישה. הבדיקה כפופה להתאמה אישית ותנאי הפוליסה.
       </p>
     </form>
+    {otpDialog}
+    </>
   );
 };
 

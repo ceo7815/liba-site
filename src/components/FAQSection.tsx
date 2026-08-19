@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import SectionTitle from "@/components/SectionTitle";
 
 export interface FAQItem {
   question: string;
@@ -13,15 +14,18 @@ export interface FAQItem {
 interface FAQSectionProps {
   title?: string;
   items: FAQItem[];
+  eyebrow?: string;
 }
 
-const FAQSection = ({ title = "שאלות נפוצות", items }: FAQSectionProps) => {
+const FAQSection = ({ title = "שאלות נפוצות", items, eyebrow }: FAQSectionProps) => {
   if (!items || items.length === 0) return null;
+
+  const accent = title.includes("נפוצות") ? "נפוצות" : undefined;
 
   return (
     <section className="section-padding">
       <div className="container mx-auto max-w-3xl">
-        <h2 className="font-heading text-2xl md:text-3xl font-bold mb-8 text-center">{title}</h2>
+        <SectionTitle title={title} accent={accent} eyebrow={eyebrow} />
         <Accordion type="single" collapsible className="space-y-3">
           {items.map((item, index) => (
             <AccordionItem

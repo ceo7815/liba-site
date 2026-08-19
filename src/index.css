@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Rubik:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -108,6 +108,28 @@
   }
 }
 
+.section-title-underline {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--accent)),
+    hsl(var(--brand-gold)),
+    hsl(var(--brand-teal))
+  );
+  transform-origin: right center;
+}
+
+.section-title-underline--short {
+  position: relative;
+  width: 4.5rem;
+  transform-origin: center;
+}
+
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-l from-primary to-accent;
@@ -203,22 +225,22 @@
   width: max-content;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   animation: insurance-marquee 28s linear infinite;
   will-change: transform;
 }
 
 .insurance-logo-card {
-  width: 7rem;
-  height: 4rem;
+  width: 9.5rem;
+  height: 5.5rem;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.75rem;
+  border-radius: 0.85rem;
   border: 1px solid hsl(var(--border) / 0.45);
   background-color: hsl(var(--card) / 0.88);
-  padding: 0.5rem;
+  padding: 0.4rem 0.5rem;
   transition: border-color 0.25s ease;
 }
 
@@ -227,7 +249,7 @@
 }
 
 .insurance-logo-image {
-  max-height: 2.4rem;
+  max-height: 4rem;
   width: 100%;
   object-fit: contain;
 }
@@ -239,13 +261,13 @@
 
 @media (min-width: 768px) {
   .insurance-logo-card {
-    width: 9rem;
-    height: 5rem;
-    padding: 0.65rem;
+    width: 12.5rem;
+    height: 7rem;
+    padding: 0.45rem 0.6rem;
   }
 
   .insurance-logo-image {
-    max-height: 3.2rem;
+    max-height: 5.25rem;
   }
 }
 
@@ -285,6 +307,59 @@
   animation: spin-slow 30s linear infinite;
 }
 
+@property --nav-rim {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.nav-float-rim {
+  isolation: isolate;
+  background:
+    conic-gradient(
+      from var(--nav-rim),
+      hsl(var(--accent) / 0.25) 0deg,
+      hsl(var(--accent)) 28deg,
+      hsl(var(--brand-gold)) 48deg,
+      hsl(var(--brand-teal)) 72deg,
+      hsl(var(--accent) / 0.22) 110deg,
+      hsl(var(--accent) / 0.18) 360deg
+    ),
+    conic-gradient(
+      from calc(var(--nav-rim) + 180deg),
+      hsl(var(--brand-teal) / 0.2) 0deg,
+      hsl(var(--brand-teal)) 40deg,
+      hsl(var(--accent)) 62deg,
+      hsl(var(--brand-teal) / 0.2) 96deg,
+      hsl(var(--brand-teal) / 0.15) 360deg
+    );
+  animation: nav-rim-spin 3.6s linear infinite;
+  box-shadow: 0 14px 42px -18px rgba(18, 42, 64, 0.38);
+}
+
+.nav-float-rim.rim-edge-only {
+  box-shadow: none;
+}
+
+@keyframes nav-rim-spin {
+  to {
+    --nav-rim: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-float-rim {
+    animation: none;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--accent)),
+      hsl(var(--brand-gold)),
+      hsl(var(--brand-teal))
+    );
+    box-shadow: 0 14px 42px -18px rgba(18, 42, 64, 0.38);
+  }
+}
+
 /* Pulse glow for CTA */
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 20px hsl(var(--accent) / 0.3); }
@@ -293,6 +368,35 @@
 
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes emoji-click {
+  0%,
+  50%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  58% {
+    transform: translateY(5px) scale(0.78);
+  }
+  68% {
+    transform: translateY(5px) scale(0.78);
+  }
+  80% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.emoji-click {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  animation: emoji-click 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emoji-click {
+    animation: none;
+  }
 }
 
 /* Gradient line animation */
@@ -349,13 +453,7 @@
     linear-gradient(180deg, hsl(var(--athlete-bg)) 0%, hsl(0 0% 8%) 50%, hsl(var(--athlete-bg)) 100%);
   background-attachment: fixed;
   color: hsl(var(--athlete-text));
-  font-family: "Heebo", Arial, sans-serif;
-}
-
-/* Liba logo turned white for dark landing page */
-.athlete-logo-white {
-  filter: brightness(0) invert(1);
-  opacity: 0.95;
+  font-family: "Rubik", Arial, sans-serif;
 }
 
 .athlete-scope ::selection {
@@ -539,7 +637,7 @@
   will-change: transform;
 }
 .athlete-marquee-item {
-  font-family: "Heebo", Arial, sans-serif;
+  font-family: "Rubik", Arial, sans-serif;
   font-weight: 900;
   font-size: clamp(1.4rem, 3vw, 2.4rem);
   letter-spacing: 0.08em;
@@ -588,7 +686,7 @@
 
 /* Outlined kinetic display text */
 .athlete-stroke-text {
-  font-family: "Heebo", Arial, sans-serif;
+  font-family: "Rubik", Arial, sans-serif;
   font-weight: 900;
   -webkit-text-stroke: 2px hsl(var(--athlete-text) / 0.35);
   color: transparent;
@@ -644,7 +742,7 @@
 
 /* Number badge with multi-color stops */
 .athlete-stat-num {
-  font-family: "Heebo", Arial, sans-serif;
+  font-family: "Rubik", Arial, sans-serif;
   font-weight: 900;
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1;

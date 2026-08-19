@@ -6,13 +6,14 @@ import SEOHead from "@/components/SEOHead";
 import { siteConfig, statusOptions } from "@/data/siteConfig";
 import { useToast } from "@/hooks/use-toast";
 import { isValidIsraeliId, normalizeIsraeliId } from "@/lib/validators/israeliId";
-import { isValidIsraeliPhone, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
+import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 import { markLeadPending } from "@/lib/fbq";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
 import logo from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
 
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 const WEBHOOK_URL = "https://hook.eu2.make.com/s4lcejgbe7mk90dkuwtughehok7x972c";
 
@@ -30,6 +31,7 @@ const LPGovBenefitsCheckPage = () => {
   const formStartedAt = useRef(Date.now());
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { confirmPhone, otpDialog } = usePhoneOtp();
 
   const [formData, setFormData] = useState({
     name: "", phone: "", idNumber: "", ageGroup: "", birthDate: "",
@@ -55,8 +57,8 @@ const LPGovBenefitsCheckPage = () => {
     if (phoneError) setPhoneError(null);
   };
   const handlePhoneBlur = () => {
-    if (formData.phone && !isValidIsraeliPhone(formData.phone)) {
-      setPhoneError("מספר טלפון לא תקין. אנא הזינו מספר ישראלי תקין (לדוגמה 050-1234567).");
+    if (formData.phone && !isValidIsraeliMobile(formData.phone)) {
+      setPhoneError(MOBILE_PHONE_ERROR);
     }
   };
 
@@ -64,8 +66,8 @@ const LPGovBenefitsCheckPage = () => {
     e.preventDefault();
     if (formData.website) return;
     if (Date.now() - formStartedAt.current < 3000) return;
-    if (!isValidIsraeliPhone(formData.phone)) {
-      setPhoneError("מספר טלפון לא תקין. אנא הזינו מספר ישראלי תקין (לדוגמה 050-1234567).");
+    if (!isValidIsraeliMobile(formData.phone)) {
+      setPhoneError(MOBILE_PHONE_ERROR);
       return;
     }
     if (!isValidIsraeliId(formData.idNumber)) {
@@ -91,8 +93,11 @@ const LPGovBenefitsCheckPage = () => {
 
     setSending(true);
     try {
-      backupLead("lp-government-benefits", payload);
-      await postLeadWebhooks(WEBHOOK_URL, payload);
+      const verified = await confirmPhone(formData.phone);
+      if (!verified) return;
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: true };
+      backupLead("lp-government-benefits", verifiedPayload);
+      await postLeadWebhooks(WEBHOOK_URL, verifiedPayload);
       setSubmitted(true);
       markLeadPending();
       setTimeout(() => navigate("/lp/government-benefits/thank-you"), 500);
@@ -275,6 +280,7 @@ const LPGovBenefitsCheckPage = () => {
           <p className="text-primary-foreground/40 text-xs">© {new Date().getFullYear()} {siteConfig.name}. כל הזכויות שמורות.</p>
         </div>
       </footer>
+      {otpDialog}
     </main>
   );
 };

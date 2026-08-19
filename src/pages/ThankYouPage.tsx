@@ -37,7 +37,7 @@ const ThankYouPage = () => {
         </ul>
       </div>
 
-      <Link to="/tools/insurance-scan" className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 rounded-full font-bold text-lg hover:opacity-90 transition-opacity shadow-lg mb-6">
+      <Link to="/insurance-check" className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 rounded-full font-bold text-lg hover:opacity-90 transition-opacity shadow-lg mb-6">
         הפעילו את סורק הביטוח האישי (90 שניות)
       </Link>
 

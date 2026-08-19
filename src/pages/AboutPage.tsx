@@ -149,7 +149,7 @@ const AboutPage = () => {
             className="glass-dark p-10 border border-primary-foreground/10">
             <h2 className="font-heading text-2xl font-bold mb-3 text-primary-foreground">רוצים לדעת מה המצב שלכם?</h2>
             <p className="text-primary-foreground/70 mb-6">הסורק הביטוחי שלנו יעזור לכם להבין בדיוק איפה אתם עומדים.</p>
-            <Link to="/tools/insurance-scan" className="inline-block bg-accent text-accent-foreground px-8 py-3.5 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg animate-pulse-glow">
+            <Link to="/insurance-check" className="inline-block bg-accent text-accent-foreground px-8 py-3.5 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg animate-pulse-glow">
               לסורק הביטוחי →
             </Link>
           </motion.div>

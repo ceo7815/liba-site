@@ -7,9 +7,10 @@ import { siteConfig } from "@/data/siteConfig";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
 import knessetArticle from "@/assets/knesset-duplicate-insurance.png";
-import { isValidIsraeliPhone, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
+import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 const WEBHOOK_URLS = [
   "https://hook.eu2.make.com/w5el6qmhgt9mlkc1ewc4gsehxwbus8bi",
@@ -63,6 +64,7 @@ const LPInsuranceCheckPage = () => {
 
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { confirmPhone, otpDialog } = usePhoneOtp();
   const formStartedAt = useRef(Date.now());
   const honeypot = useRef("");
   const questionsRef = useRef<HTMLDivElement>(null);
@@ -105,8 +107,8 @@ const LPInsuranceCheckPage = () => {
     if (honeypot.current) return;
     if (Date.now() - formStartedAt.current < 3000) return;
 
-    if (!isValidIsraeliPhone(answers.phone)) {
-      setPhoneError("מספר טלפון לא תקין. אנא הזינו מספר ישראלי תקין (לדוגמה 050-1234567).");
+    if (!isValidIsraeliMobile(answers.phone)) {
+      setPhoneError(MOBILE_PHONE_ERROR);
       return;
     }
 
@@ -132,8 +134,11 @@ const LPInsuranceCheckPage = () => {
 
     setSending(true);
     try {
-      backupLead("insurance-check", payload);
-      await postLeadWebhooks(WEBHOOK_URLS, payload);
+      const verified = await confirmPhone(answers.phone);
+      if (!verified) return;
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: true };
+      backupLead("insurance-check", verifiedPayload);
+      await postLeadWebhooks(WEBHOOK_URLS, verifiedPayload);
       navigate("/insurance-check/thankyou");
     } catch (error) {
       console.error("Webhook error:", error);
@@ -444,6 +449,7 @@ const LPInsuranceCheckPage = () => {
       </div>
 
       <LPFooter />
+      {otpDialog}
     </main>
   );
 };

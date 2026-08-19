@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ["Heebo", "Arial", "sans-serif"],
+        heading: ["Rubik", "Arial", "sans-serif"],
         body: ["Rubik", "Arial", "sans-serif"],
       },
       colors: {

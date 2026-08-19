@@ -46,7 +46,7 @@ const serviceData: Record<string, {
     topicOptions: ["לוודא כיסוי נכון", "לבדוק כפילויות ותשלום", "לעשות סדר בתיק"],
     internalLinks: [
       { label: "ביטוחים למשפחה", href: "/services/family-insurance/health-insurance" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
     ],
   },
   "critical-illness": {
@@ -78,7 +78,7 @@ const serviceData: Record<string, {
     topicOptions: ["לדעת שיש כיסוי ברור", "לעשות סדר בתיק", "לוודא שאין כפילויות"],
     internalLinks: [
       { label: "ביטוחים למשפחה", href: "/services/family-insurance/health-insurance" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
     ],
   },
   "life-insurance": {
@@ -172,7 +172,7 @@ const serviceData: Record<string, {
     topicOptions: ["טיול משפחתי", "נסיעת עסקים", "ספורט/אתגרי", "אחר"],
     internalLinks: [
       { label: "ביטוח בריאות", href: "/services/family-insurance/health-insurance" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
     ],
   },
   "retirement-planning": {
@@ -202,7 +202,7 @@ const serviceData: Record<string, {
     topicOptions: ["מתקרב לפרישה", "כבר בפרישה", "רוצה לבדוק אופציות"],
     internalLinks: [
       { label: "קרנות השתלמות", href: "/services/retirement/study-fund" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
     ],
   },
   "study-fund": {
@@ -231,7 +231,7 @@ const serviceData: Record<string, {
     topicOptions: ["תכנון פרישה", "קרן השתלמות", "כללי"],
     internalLinks: [
       { label: "פנסיה ופרישה", href: "/services/retirement/retirement-planning" },
-      { label: "סורק הביטוח האישי", href: "/tools/insurance-scan" },
+      { label: "סורק הביטוח האישי", href: "/insurance-check" },
     ],
   },
   "financial-planning": {
@@ -321,7 +321,7 @@ const ServicePage = () => {
               <Link to="/contact" className="bg-accent text-accent-foreground px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity">
                 קבעו שיחת היכרות
               </Link>
-              <Link to="/tools/insurance-scan" className="border-2 border-primary-foreground/30 text-primary-foreground px-8 py-3 rounded-full font-bold hover:bg-primary-foreground/10 transition-colors">
+              <Link to="/insurance-check" className="border-2 border-primary-foreground/30 text-primary-foreground px-8 py-3 rounded-full font-bold hover:bg-primary-foreground/10 transition-colors">
                 סורק הביטוח האישי
               </Link>
             </div>

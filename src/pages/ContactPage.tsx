@@ -6,6 +6,7 @@ import SEOHead from "@/components/SEOHead";
 import FAQSection from "@/components/FAQSection";
 import SectionDivider from "@/components/SectionDivider";
 import { siteConfig } from "@/data/siteConfig";
+import SocialButtons from "@/components/SocialButtons";
 
 const contactCards = [
   { icon: <Phone className="w-5 h-5" />, label: "טלפון", value: siteConfig.phones.join(" / "), href: `tel:${siteConfig.phonesIntl[0]}` },
@@ -89,6 +90,10 @@ const ContactPage = () => {
                     )}
                   </motion.div>
                 ))}
+              </div>
+              <div className="pt-2">
+                <p className="mb-4 text-sm font-bold text-foreground">ליבה ברשתות</p>
+                <SocialButtons align="start" />
               </div>
               <p className="text-xs text-muted-foreground mt-6">
                 לא שולחים ספאם. חוזרים רק לתיאום שיחה. המידע באתר כללי ואינו מהווה ייעוץ אישי.

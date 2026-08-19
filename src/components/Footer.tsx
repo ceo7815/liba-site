@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { siteConfig, servicesMenu, blogCategories } from "@/data/siteConfig";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-light.png";
+import SocialButtons from "@/components/SocialButtons";
 
 const WhatsAppIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -25,12 +26,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <img src={logo} alt={siteConfig.name} className="h-20 w-auto mb-4 brightness-0 invert" />
+            <img src={logo} alt={siteConfig.name} className="h-20 w-auto mb-4" />
             <p className="text-sm text-primary-foreground/70 leading-relaxed mb-4">
               ליווי ביטוחי ופיננסי מקצועי – סדר בכיסוי, בתנאים ובכסף.
             </p>
             <Link
-              to="/tools/insurance-scan"
+              to="/insurance-check"
               className="inline-block bg-accent text-accent-foreground px-5 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity hover:shadow-lg hover:shadow-accent/20"
             >
               סורק הביטוח האישי
@@ -120,34 +121,8 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
-            <div className="mt-6 flex items-center gap-4">
-              <a
-                href={siteConfig.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="אינסטגרם"
-                className="text-primary-foreground/60 hover:text-accent transition-colors"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href={siteConfig.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="פייסבוק"
-                className="text-primary-foreground/60 hover:text-accent transition-colors"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href={`https://wa.me/972${siteConfig.whatsapp.replace(/^0/, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="וואטסאפ"
-                className="text-primary-foreground/60 hover:text-accent transition-colors"
-              >
-                <WhatsAppIcon className="w-5 h-5" />
-              </a>
+            <div className="mt-6">
+              <SocialButtons light align="start" />
             </div>
             <div className="mt-6 space-y-1 text-xs text-primary-foreground/50">
               <Link to="/privacy-policy" className="block hover:text-accent/70 transition-colors">מדיניות פרטיות</Link>

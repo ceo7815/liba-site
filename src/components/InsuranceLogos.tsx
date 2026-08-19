@@ -6,6 +6,7 @@ import migdal from "@/assets/logos/migdal.png";
 import harel from "@/assets/logos/harel.png";
 import ayalon from "@/assets/logos/ayalon.png";
 import hachshara from "@/assets/logos/hachshara.png";
+import SectionTitle from "@/components/SectionTitle";
 
 const companies = [
   { name: "כלל ביטוח", logo: klal },
@@ -21,6 +22,7 @@ const companies = [
 interface InsuranceLogosProps {
   title?: string;
   subtitle?: string;
+  eyebrow?: string;
 }
 
 const loopedCompanies = [...companies, ...companies];
@@ -28,12 +30,12 @@ const loopedCompanies = [...companies, ...companies];
 const InsuranceLogos = ({
   title = "עובדים מול חברות הביטוח והגופים המובילים בישראל",
   subtitle = "אנחנו עובדים מול מגוון חברות ביטוח ובתי השקעות — כדי להתאים פתרון לפי צורך, לא לפי חברה אחת.",
+  eyebrow,
 }: InsuranceLogosProps) => {
   return (
     <section className="section-padding bg-secondary/30 overflow-hidden">
-      <div className="container mx-auto text-center">
-        <h2 className="font-heading text-2xl md:text-3xl font-bold mb-3">{title}</h2>
-        <p className="text-muted-foreground mb-10 max-w-2xl mx-auto">{subtitle}</p>
+      <div className="container mx-auto">
+        <SectionTitle title={title} subtitle={subtitle} accent="המובילים" eyebrow={eyebrow} />
       </div>
 
       <div className="relative">
