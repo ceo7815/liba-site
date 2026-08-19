@@ -37,6 +37,22 @@ const heroItem = {
   },
 };
 
+const heroTitle = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.18 },
+  },
+};
+
+const heroRule = {
+  hidden: { scaleX: 0, opacity: 0 },
+  visible: {
+    scaleX: 1,
+    opacity: 1,
+    transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 const HomePage = () => {
   const featuredArticles = blogArticles.slice(0, 4);
   const reduceMotion = useReducedMotion();
@@ -77,12 +93,23 @@ const HomePage = () => {
             animate="visible"
           >
             <motion.h1
-              variants={heroItem}
-              className="font-heading text-4xl md:text-5xl lg:text-6xl font-black text-primary-foreground leading-tight mb-6"
+              variants={heroTitle}
+              className="font-heading font-black text-primary-foreground leading-tight mb-6"
             >
-              ליווי ביטוחי ופיננסי -{" "}
-              <span className="text-accent">עושים סדר</span>{" "}
-              בכיסוי, בתנאים ובכסף
+              <motion.span variants={heroItem} className="block text-5xl md:text-6xl lg:text-7xl">
+                ליווי ביטוח ופיננסי
+              </motion.span>
+              <motion.span
+                aria-hidden
+                variants={heroRule}
+                className="mx-auto mt-4 mb-1 block h-[3px] w-40 origin-center rounded-full bg-accent shadow-[0_0_20px_hsl(var(--accent)/0.55)] md:w-52"
+              />
+              <motion.span variants={heroItem} className="mt-3 block text-2xl md:text-3xl lg:text-4xl text-accent">
+                עושים סדר בכיסוי
+              </motion.span>
+              <motion.span variants={heroItem} className="mt-1 block text-2xl md:text-3xl lg:text-4xl">
+                בתנאים ובכסף
+              </motion.span>
             </motion.h1>
             <motion.p
               variants={heroItem}
@@ -413,7 +440,7 @@ const HomePage = () => {
 
 const whatWeDo = [
   { icon: <FileSearch className="w-8 h-8" />, bgIcon: <FileSearch className="w-32 h-32" />, title: "בדיקת תיק ביטוח", desc: "מיפוי מהיר של הכיסויים והחיובים + איתור כפילויות/פערים." },
-  { icon: <Heart className="w-8 h-8" />, bgIcon: <Heart className="w-32 h-32" />, title: "התאמת כיסוי", desc: "בריאות • מחלות קשות • חיים • משכנתא • נסיעות — לפי צורך אמיתי." },
+  { icon: <Heart className="w-8 h-8" />, bgIcon: <Heart className="w-32 h-32" />, title: "התאמת כיסוי", desc: "בריאות • מחלות קשות • חיים • משכנתא • נסיעות לחו״ל — לפי צורך אמיתי." },
   { icon: <TrendingUp className="w-8 h-8" />, bgIcon: <TrendingUp className="w-32 h-32" />, title: "דוח נקי ומסודר", desc: "בדיקת תיק ביטוח – איתור כפילויות וחוסרים, בשפה פשוטה." },
 ];
 
@@ -422,7 +449,7 @@ const services = [
   { icon: <Brain className="w-5 h-5 md:w-6 md:h-6" />, title: "מחלות קשות", desc: "כסף שמגיע ברגע האמת.", href: "/services/family-insurance/critical-illness" },
   { icon: <Shield className="w-5 h-5 md:w-6 md:h-6" />, title: "ביטוח חיים", desc: "להגן על המשפחה כלכלית.", href: "/services/family-insurance/life-insurance" },
   { icon: <Home className="w-5 h-5 md:w-6 md:h-6" />, title: "ביטוח משכנתא", desc: "לוודא שלא משלמים סתם.", href: "/services/family-insurance/mortgage-insurance" },
-  { icon: <Plane className="w-5 h-5 md:w-6 md:h-6" />, title: "ביטוח נסיעות", desc: "כיסוי נכון לפני טיסה.", href: "/services/family-insurance/travel-insurance" },
+  { icon: <Plane className="w-5 h-5 md:w-6 md:h-6" />, title: "ביטוח נסיעות לחו״ל", desc: "כיסוי נכון לפני טיסה.", href: "/services/family-insurance/travel-insurance" },
   { icon: <TrendingUp className="w-5 h-5 md:w-6 md:h-6" />, title: "תכנון פרישה", desc: "סדר לפני החלטות יקרות.", href: "/services/retirement/retirement-planning" },
   { icon: <Landmark className="w-5 h-5 md:w-6 md:h-6" />, title: "תכנון פיננסי", desc: "סדר בתזרים ובהחלטות.", href: "/services/finance/financial-planning" },
   { icon: <Scale className="w-5 h-5 md:w-6 md:h-6" />, title: "מיצוי זכויות", desc: "לוודא שלא מפספסים.", href: "/services/rights/rights-realization" },
