@@ -1,6 +1,6 @@
 # ליבה ביטוח ופנסיוני — אתר
 
-אתר שיווקי של `liba-fs.co.il`. לידים נשלחים ל-Make; גיבוי לטבלת `leads` ב-Supabase.
+אתר שיווקי של `liba-fs.co.il`. לידים נשלחים ל-Make; גיבוי לטבלת `website_leads` ב-liba-os (Supabase).
 
 ## פריסה ב-xCloud (לפני שינוי DNS)
 

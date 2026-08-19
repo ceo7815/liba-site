@@ -12,7 +12,6 @@ import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
 
 const WEBHOOK_URLS = [
-  "https://hook.eu2.make.com/81rtlujijnlwes3ean9qy8b1q4bdxbch",
   "https://hook.eu2.make.com/w5el6qmhgt9mlkc1ewc4gsehxwbus8bi",
 ];
 

@@ -14,7 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      leads: {
+      website_leads: {
         Row: {
           created_at: string
           email: string | null

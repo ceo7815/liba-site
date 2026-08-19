@@ -1,4 +1,5 @@
-// Backup every lead submission to the connected Supabase `leads` table.
+// Backup every lead submission to liba-os `website_leads`.
+// Isolated from OS tables: the public site key can INSERT only.
 // Runs alongside the existing Make webhook so nothing is lost if the webhook/automation fails.
 // In local `npm run dev`, neither Make nor the live leads table is touched.
 
@@ -54,7 +55,7 @@ const extractUtm = (): UnknownRecord | null => {
 };
 
 /**
- * Fire-and-forget insert of a lead into the `leads` table.
+ * Fire-and-forget insert of a lead into the `website_leads` table.
  * Never throws — failures are logged and swallowed so form flow isn't blocked.
  */
 export const backupLead = async (
@@ -75,7 +76,7 @@ export const backupLead = async (
     const referrer = typeof document !== "undefined" && document.referrer ? document.referrer.slice(0, 500) : null;
     const user_agent = typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null;
 
-    const { error } = await supabase.from("leads").insert({
+    const { error } = await supabase.from("website_leads").insert({
       source: source.slice(0, 80),
       full_name: full_name?.slice(0, 200) ?? null,
       phone: phone?.slice(0, 40) ?? null,
