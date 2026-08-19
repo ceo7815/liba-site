@@ -8,5 +8,7 @@ services:
         VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
         VITE_SUPABASE_PROJECT_ID: ${VITE_SUPABASE_PROJECT_ID}
     ports:
-      - "8080:8080"
+      # xCloud nginx already occupies host 8080 after Go Live.
+      # Traffic: 80/443 -> this host port -> container 8080.
+      - "3080:8080"
     restart: unless-stopped
