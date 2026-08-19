@@ -8,6 +8,7 @@ services:
         VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
         VITE_SUPABASE_PROJECT_ID: ${VITE_SUPABASE_PROJECT_ID}
     ports:
-      # Fresh xCloud Docker site: host nginx 80/443 -> 8080 -> container.
-      - "8080:8080"
+      # Host 3180: leftover containers still hold 8080 after xCloud site delete.
+      # In the xCloud wizard pick 3180 as the primary port (not 8080).
+      - "3180:8080"
     restart: unless-stopped
