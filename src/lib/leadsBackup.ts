@@ -55,7 +55,8 @@ const extractUtm = (): UnknownRecord | null => {
 };
 
 /**
- * Fire-and-forget insert of a lead into the `website_leads` table.
+ * Persist a lead to `website_leads` before the Make webhook.
+ * Callers must await this so a route change does not cancel the insert.
  * Never throws — failures are logged and swallowed so form flow isn't blocked.
  */
 export const backupLead = async (
@@ -68,9 +69,24 @@ export const backupLead = async (
       return;
     }
 
-    const full_name = pickString(payload, ["fullName", "full_name", "name", "childName", "child_name"]);
-    const phone = pickString(payload, ["phone", "phoneNumber", "phone_number", "tel"]);
-    const email = pickString(payload, ["email", "mail"]);
+    const full_name = pickString(payload, [
+      "fullName",
+      "full_name",
+      "name",
+      "childName",
+      "child_name",
+      "lead_full_name",
+      "lead_name",
+    ]);
+    const phone = pickString(payload, [
+      "phone",
+      "phoneNumber",
+      "phone_number",
+      "tel",
+      "lead_phone_number",
+      "lead_phone",
+    ]);
+    const email = pickString(payload, ["email", "mail", "lead_email"]);
 
     const page_url = typeof window !== "undefined" ? window.location.href.slice(0, 500) : null;
     const referrer = typeof document !== "undefined" && document.referrer ? document.referrer.slice(0, 500) : null;

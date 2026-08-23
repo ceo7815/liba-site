@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 import { markLeadPending } from "@/lib/fbq";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
-import { usePhoneOtp } from "@/hooks/usePhoneOtp";
+import { PHONE_OTP_ENABLED, usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 // Flatten all services from servicesMenu for the dropdown
 const allServices = servicesMenu.flatMap((group) =>
@@ -95,8 +95,8 @@ const LeadForm = ({
       const verified = await confirmPhone(formData.phone);
       if (!verified) return;
 
-      const verifiedPayload = { ...payload, meta_phone_otp_verified: true };
-      backupLead(source, verifiedPayload);
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: PHONE_OTP_ENABLED };
+      await backupLead(source, verifiedPayload);
       await postLeadWebhooks(WEBHOOK_URL, verifiedPayload);
 
       setSubmitted(true);

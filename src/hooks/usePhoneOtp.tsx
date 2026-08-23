@@ -5,6 +5,9 @@ import { isValidIsraeliMobile, normalizeIsraeliPhone } from "@/lib/validators/is
 
 const RESEND_SECONDS = 45;
 
+/** 019 has not approved sender name LIBA yet. Skip SMS OTP so leads still reach the client. Set true after 019 approves and a live SMS test passes. */
+export const PHONE_OTP_ENABLED = false;
+
 export const usePhoneOtp = () => {
   const [open, setOpen] = useState(false);
   const [phone, setPhone] = useState("");
@@ -49,8 +52,8 @@ export const usePhoneOtp = () => {
     const normalized = normalizeIsraeliPhone(rawPhone);
     if (!isValidIsraeliMobile(normalized)) return Promise.resolve(false);
 
-    if (!import.meta.env.PROD) {
-      console.info("[local] skipped phone OTP to protect SMS credits");
+    if (!PHONE_OTP_ENABLED || !import.meta.env.PROD) {
+      console.info("[otp] skipped phone OTP", PHONE_OTP_ENABLED ? "(local)" : "(019 sender pending approval)");
       return Promise.resolve(true);
     }
 

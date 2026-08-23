@@ -13,7 +13,7 @@ import logo from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
 
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
-import { usePhoneOtp } from "@/hooks/usePhoneOtp";
+import { PHONE_OTP_ENABLED, usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 const WEBHOOK_URL = "https://hook.eu2.make.com/s4lcejgbe7mk90dkuwtughehok7x972c";
 
@@ -95,8 +95,8 @@ const LPGovBenefitsCheckPage = () => {
     try {
       const verified = await confirmPhone(formData.phone);
       if (!verified) return;
-      const verifiedPayload = { ...payload, meta_phone_otp_verified: true };
-      backupLead("lp-government-benefits", verifiedPayload);
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: PHONE_OTP_ENABLED };
+      await backupLead("lp-government-benefits", verifiedPayload);
       await postLeadWebhooks(WEBHOOK_URL, verifiedPayload);
       setSubmitted(true);
       markLeadPending();

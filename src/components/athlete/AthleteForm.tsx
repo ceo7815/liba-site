@@ -6,7 +6,7 @@ import { captureUtmFromUrl, getStoredUtm } from "@/lib/utm";
 import { useToast } from "@/hooks/use-toast";
 import { markLeadPending } from "@/lib/fbq";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
-import { usePhoneOtp } from "@/hooks/usePhoneOtp";
+import { PHONE_OTP_ENABLED, usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 export const ATHLETE_WEBHOOK_URL = "https://hook.eu2.make.com/xiuzt4eufe8bru8k070xtkye4na21w38";
 
@@ -142,8 +142,8 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
         });
         return;
       }
-      const verifiedPayload = { ...payload, meta_phone_otp_verified: true };
-      backupLead("athlete-pack", verifiedPayload);
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: PHONE_OTP_ENABLED };
+      await backupLead("athlete-pack", verifiedPayload);
       await postLeadWebhooks(ATHLETE_WEBHOOK_URL, verifiedPayload);
       markLeadPending();
       navigate("/athlete-thankyou");

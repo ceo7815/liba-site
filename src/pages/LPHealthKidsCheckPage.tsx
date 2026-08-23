@@ -95,7 +95,7 @@ const LPHealthKidsCheckPage = () => {
 
     setSending(true);
     try {
-      backupLead("lp-health-kids", payload);
+      await backupLead("lp-health-kids", payload);
       await postLeadWebhooks(WEBHOOK_URL, payload);
       setSubmitted(true);
       try { sessionStorage.removeItem("hk_need"); } catch { /* ignore */ }
