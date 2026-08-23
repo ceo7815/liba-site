@@ -2,6 +2,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type PhoneOtpResult = { ok: true } | { ok: false; error: string };
 
+/** 019 has not approved sender LIBA yet. Skip SMS so leads still submit. */
+export const PHONE_OTP_ENABLED = false;
+
 const fallbackError = "לא הצלחנו לאמת את המספר. נסו שוב.";
 
 const readInvokeError = async (error: unknown, data: unknown): Promise<string> => {
@@ -35,8 +38,12 @@ const invokeOtp = async (body: Record<string, string>): Promise<PhoneOtpResult> 
   return { ok: true };
 };
 
-export const sendPhoneOtp = (phone: string): Promise<PhoneOtpResult> =>
-  invokeOtp({ action: "send", phone });
+export const sendPhoneOtp = (phone: string): Promise<PhoneOtpResult> => {
+  if (!PHONE_OTP_ENABLED) return Promise.resolve({ ok: true });
+  return invokeOtp({ action: "send", phone });
+};
 
-export const verifyPhoneOtp = (phone: string, code: string): Promise<PhoneOtpResult> =>
-  invokeOtp({ action: "verify", phone, code });
+export const verifyPhoneOtp = (phone: string, code: string): Promise<PhoneOtpResult> => {
+  if (!PHONE_OTP_ENABLED) return Promise.resolve({ ok: true });
+  return invokeOtp({ action: "verify", phone, code });
+};

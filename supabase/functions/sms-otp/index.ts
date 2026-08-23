@@ -72,14 +72,6 @@ Deno.serve(async (req) => {
     return json({ ok: false, error: "method_not_allowed" }, 405, origin);
   }
 
-  const username = Deno.env.get("SMS_019_USERNAME") ?? "";
-  const token = Deno.env.get("SMS_019_API_TOKEN") ?? "";
-  const source = (Deno.env.get("SMS_019_SOURCE") ?? "LIBA").replace(/[^A-Za-z0-9]/g, "").slice(0, 11);
-
-  if (!username || !token || !source) {
-    return json({ ok: false, error: "לא ניתן לאמת כרגע. נסו שוב מאוחר יותר." }, 503, origin);
-  }
-
   let body: { action?: string; phone?: string; code?: string };
   try {
     body = await req.json();
@@ -90,6 +82,29 @@ Deno.serve(async (req) => {
   const phone = typeof body.phone === "string" ? toMobile(body.phone) : null;
   if (!phone) {
     return json({ ok: false, error: "נדרש מספר נייד ישראלי תקין." }, 400, origin);
+  }
+
+  // 019 sender LIBA is pending approval. Do not send SMS; accept verify so cached old pages can still finish.
+  const otpDisabled = (Deno.env.get("SMS_OTP_DISABLED") ?? "true").toLowerCase() !== "false";
+  if (otpDisabled) {
+    if (body.action === "send") {
+      return json({ ok: true }, 200, origin);
+    }
+    if (body.action === "verify") {
+      const code = String(body.code ?? "").replace(/\D/g, "");
+      if (!/^\d{6}$/.test(code)) {
+        return json({ ok: false, error: "הקוד חייב להיות 6 ספרות." }, 400, origin);
+      }
+      return json({ ok: true }, 200, origin);
+    }
+  }
+
+  const username = Deno.env.get("SMS_019_USERNAME") ?? "";
+  const token = Deno.env.get("SMS_019_API_TOKEN") ?? "";
+  const source = (Deno.env.get("SMS_019_SOURCE") ?? "LIBA").replace(/[^A-Za-z0-9]/g, "").slice(0, 11);
+
+  if (!username || !token || !source) {
+    return json({ ok: false, error: "לא ניתן לאמת כרגע. נסו שוב מאוחר יותר." }, 503, origin);
   }
 
   const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "unknown";

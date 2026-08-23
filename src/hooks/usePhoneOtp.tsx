@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import PhoneOtpDialog from "@/components/PhoneOtpDialog";
-import { sendPhoneOtp, verifyPhoneOtp } from "@/lib/phoneOtp";
+import { PHONE_OTP_ENABLED, sendPhoneOtp, verifyPhoneOtp } from "@/lib/phoneOtp";
 import { isValidIsraeliMobile, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 
 const RESEND_SECONDS = 45;
 
-/** 019 has not approved sender name LIBA yet. Skip SMS OTP so leads still reach the client. Set true after 019 approves and a live SMS test passes. */
-export const PHONE_OTP_ENABLED = false;
+export { PHONE_OTP_ENABLED } from "@/lib/phoneOtp";
 
 export const usePhoneOtp = () => {
   const [open, setOpen] = useState(false);
