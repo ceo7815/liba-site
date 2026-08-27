@@ -14,7 +14,7 @@ import logo from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
 
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
-import { PHONE_OTP_ENABLED, usePhoneOtp } from "@/hooks/usePhoneOtp";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 const WEBHOOK_URL = "https://hook.eu2.make.com/mp1oosgmso9jy4k3gboqw09mec7avmf0";
 
@@ -97,9 +97,9 @@ const LPMortgageCheckPage = () => {
 
     setSending(true);
     try {
-      const verified = await confirmPhone(formData.phone);
-      if (!verified) return;
-      const verifiedPayload = { ...payload, meta_phone_otp_verified: PHONE_OTP_ENABLED };
+      const otp = await confirmPhone(formData.phone);
+      if (!otp.ok) return;
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: otp.verified };
       await backupLead("lp-mortgage-insurance", verifiedPayload);
       await postLeadWebhooks(WEBHOOK_URL, verifiedPayload);
       setSubmitted(true);

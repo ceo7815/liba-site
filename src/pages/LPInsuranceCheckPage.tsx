@@ -10,7 +10,7 @@ import knessetArticle from "@/assets/knesset-duplicate-insurance.png";
 import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
-import { PHONE_OTP_ENABLED, usePhoneOtp } from "@/hooks/usePhoneOtp";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 const WEBHOOK_URLS = [
   "https://hook.eu2.make.com/w5el6qmhgt9mlkc1ewc4gsehxwbus8bi",
@@ -134,9 +134,9 @@ const LPInsuranceCheckPage = () => {
 
     setSending(true);
     try {
-      const verified = await confirmPhone(answers.phone);
-      if (!verified) return;
-      const verifiedPayload = { ...payload, meta_phone_otp_verified: PHONE_OTP_ENABLED };
+      const otp = await confirmPhone(answers.phone);
+      if (!otp.ok) return;
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: otp.verified };
       await backupLead("insurance-check", verifiedPayload);
       await postLeadWebhooks(WEBHOOK_URLS, verifiedPayload);
       navigate("/insurance-check/thankyou");

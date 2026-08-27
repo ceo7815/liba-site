@@ -29,9 +29,12 @@ export type Sms019SendResponse = {
   shipment_id?: string;
 };
 
-/** Source (sender name) is max 11 chars: English letters and digits only. */
+/** Approved 019 textual sender. Hyphen is allowed so `liba-fs` is not stripped to `libafs`. */
+export const SMS_019_SOURCE_DEFAULT = "liba-fs";
+
+/** Source is max 11 chars: English letters, digits, and hyphen. */
 export const clampSmsSource = (source: string): string =>
-  source.replace(/[^A-Za-z0-9]/g, "").slice(0, 11);
+  source.replace(/[^A-Za-z0-9-]/g, "").slice(0, 11);
 
 /** 019sms accepts 05xxxxxxx or 5xxxxxxx. */
 export const toSms019Phone = (phone: string): string => {

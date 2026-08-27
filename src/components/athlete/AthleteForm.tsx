@@ -6,7 +6,7 @@ import { captureUtmFromUrl, getStoredUtm } from "@/lib/utm";
 import { useToast } from "@/hooks/use-toast";
 import { markLeadPending } from "@/lib/fbq";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
-import { PHONE_OTP_ENABLED, usePhoneOtp } from "@/hooks/usePhoneOtp";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
 export const ATHLETE_WEBHOOK_URL = "https://hook.eu2.make.com/xiuzt4eufe8bru8k070xtkye4na21w38";
 
@@ -132,8 +132,8 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
 
     setSending(true);
     try {
-      const verified = await confirmPhone(data.phone);
-      if (!verified) return;
+      const otp = await confirmPhone(data.phone);
+      if (!otp.ok) return;
       if (!checkRateLimit()) {
         toast({
           title: "יותר מדי ניסיונות",
@@ -142,7 +142,7 @@ const AthleteForm = ({ variant = "default", formId = "athlete-form" }: AthleteFo
         });
         return;
       }
-      const verifiedPayload = { ...payload, meta_phone_otp_verified: PHONE_OTP_ENABLED };
+      const verifiedPayload = { ...payload, meta_phone_otp_verified: otp.verified };
       await backupLead("athlete-pack", verifiedPayload);
       await postLeadWebhooks(ATHLETE_WEBHOOK_URL, verifiedPayload);
       markLeadPending();
