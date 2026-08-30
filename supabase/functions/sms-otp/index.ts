@@ -109,8 +109,22 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify(payload),
     });
-    const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
-    return { status: typeof data.status === "number" ? data.status : Number(data.status) };
+    const raw = await res.text();
+    let data: Record<string, unknown> = {};
+    try {
+      data = JSON.parse(raw) as Record<string, unknown>;
+    } catch {
+      console.error("[sms-otp] 019 non-json", res.status, raw.slice(0, 200));
+    }
+    const status = typeof data.status === "number" ? data.status : Number(data.status);
+    console.log("[sms-otp] 019", JSON.stringify({
+      http: res.status,
+      status,
+      message: typeof data.message === "string" ? data.message.slice(0, 120) : undefined,
+      source,
+      action: body.action,
+    }));
+    return { status };
   };
 
   if (body.action === "send") {

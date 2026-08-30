@@ -19,7 +19,12 @@ import {
 import SEOHead from "@/components/SEOHead";
 import SectionDivider from "@/components/SectionDivider";
 import FAQSection from "@/components/FAQSection";
-import { siteConfig } from "@/data/siteConfig";
+import HealthKidsBrandHeader from "@/components/health-kids/HealthKidsBrandHeader";
+import {
+  HEALTH_KIDS_CAMPAIGNS,
+  healthKidsNeedStorageKey,
+  type HealthKidsCampaignId,
+} from "@/data/healthKidsCampaigns";
 import {
   Select,
   SelectContent,
@@ -27,9 +32,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import logo from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
-
+import { siteConfig } from "@/data/siteConfig";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
 
 const NEED_OPTIONS = [
@@ -41,15 +45,23 @@ const NEED_OPTIONS = [
   "אין משהו ספציפי / רוצה לבדוק",
 ];
 
-const NeedSelectCTA = ({ variant = "light" }: { variant?: "light" | "dark" }) => {
+const NeedSelectCTA = ({
+  variant = "light",
+  campaignId,
+  checkPath,
+}: {
+  variant?: "light" | "dark";
+  campaignId: HealthKidsCampaignId;
+  checkPath: string;
+}) => {
   const navigate = useNavigate();
   const onSelect = (val: string) => {
     try {
-      sessionStorage.setItem("hk_need", val);
+      sessionStorage.setItem(healthKidsNeedStorageKey(campaignId), val);
     } catch {
       /* ignore */
     }
-    navigate("/lp/health-kids/check");
+    navigate(checkPath);
   };
   const isDark = variant === "dark";
   return (
@@ -172,7 +184,7 @@ const faqs = [
   {
     question: "אין לי כרגע שום ביטוח בריאות לילד — זה עדיין שווה לי?",
     answer:
-      "כן, ואולי אפילו יותר. ב-25 ש״ח לחודש לכל ילד זה אחד הכיסויים הכי משתלמים שיש בשוק. אבחון בודד או סדרת טיפולים מחזירים את ההשקעה לשנים קדימה.",
+      "כן, ואולי אפילו יותר. ב-30 ש״ח לחודש לכל ילד זה אחד הכיסויים הכי משתלמים שיש בשוק. אבחון בודד או סדרת טיפולים מחזירים את ההשקעה לשנים קדימה.",
   },
   {
     question: "מה ההבדל בין זה לבין מה שמכוסה בקופת חולים?",
@@ -206,15 +218,17 @@ const faqs = [
   },
 ];
 
-const LPHealthKidsPage = () => {
-  useClarityPageTags({ pageType: "landing-page", lpCampaign: "health-kids", funnelStep: "intro" });
+const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampaignId }) => {
+  const campaign = HEALTH_KIDS_CAMPAIGNS[campaignId];
+  const checkPath = `${campaign.basePath}/check`;
+  useClarityPageTags({ pageType: "landing-page", lpCampaign: campaign.clarityCampaign, funnelStep: "intro" });
 
   return (
     <main className="bg-background" dir="rtl">
       <SEOHead
-        title="כתב שירות 'התפתחות הילד' — 25 ש״ח לילד, החזרים של אלפי ש״ח | ליבה ביטוח ופנסיוני"
+        title="כתב שירות 'התפתחות הילד' — 30 ש״ח לילד, החזרים של אלפי ש״ח | ליבה ביטוח ופנסיוני"
         description="הורים — מגיע לכם החזרים של מאות עד אלפי שקלים על אבחונים וטיפולים לילדים. אבחון דידקטי, קלינאית תקשורת, טיפול רגשי ועוד. בדיקת זכאות חינם."
-        canonical="/lp/health-kids"
+        canonical={campaign.basePath}
         keywords={[
           "כתב שירות התפתחות הילד",
           "ביטוח בריאות לילדים",
@@ -228,7 +242,6 @@ const LPHealthKidsPage = () => {
         noindex
       />
 
-      {/* ═══════ HERO ═══════ */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroBg} alt="כתב שירות התפתחות הילד — בדיקת זכאות" className="w-full h-full object-cover" />
@@ -249,14 +262,9 @@ const LPHealthKidsPage = () => {
 
         <div className="relative container mx-auto px-4 py-24">
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl mx-auto text-center">
-            <motion.img
-              src={logo}
-              alt={`לוגו ${siteConfig.name}`}
-              className="h-12 md:h-16 mb-6 mx-auto"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            />
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+              <HealthKidsBrandHeader campaign={campaign} />
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -281,10 +289,9 @@ const LPHealthKidsPage = () => {
 
             <p className="text-base md:text-xl text-primary-foreground/85 mb-8 leading-relaxed max-w-2xl mx-auto">
               אבחון קשב וריכוז, טיפול רגשי, קלינאית תקשורת, רכיבה טיפולית, הדרכת הורים — כל אלה מכוסים בכתב שירות
-              ״התפתחות הילד״. <span className="text-brand-gold font-bold">רק 25 ש״ח בחודש לכל ילד.</span>
+              ״התפתחות הילד״. <span className="text-brand-gold font-bold">רק 30 ש״ח בחודש לכל ילד.</span>
             </p>
 
-            {/* Stat cards */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -293,7 +300,7 @@ const LPHealthKidsPage = () => {
             >
               {[
                 { value: "עד 80%", label: "החזר על אבחונים" },
-                { value: "25 ש״ח", label: "בחודש לכל ילד" },
+                { value: "30 ש״ח", label: "בחודש לכל ילד" },
                 { value: "אלפי ש״ח", label: "חיסכון לכל טיפול" },
               ].map((s) => (
                 <div
@@ -309,7 +316,7 @@ const LPHealthKidsPage = () => {
 
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <Link
-                to="/lp/health-kids/check"
+                to={checkPath}
                 className="bg-accent text-accent-foreground px-8 py-3.5 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg hover:shadow-accent/30 animate-pulse-glow inline-flex items-center gap-2"
               >
                 בדקו זכאות חינם
@@ -317,20 +324,17 @@ const LPHealthKidsPage = () => {
               </Link>
             </div>
 
-            <NeedSelectCTA variant="dark" />
+            <NeedSelectCTA variant="dark" campaignId={campaignId} checkPath={checkPath} />
           </motion.div>
         </div>
-        {/* Smooth color bridge keeps the hero dark before the branded diagonal cut */}
         <div
           className="absolute inset-x-0 bottom-0 h-32 pointer-events-none z-[1]"
           style={{ background: "linear-gradient(to bottom, transparent 0%, hsl(var(--brand-navy) / 0.55) 62%, hsl(var(--primary)) 100%)" }}
         />
       </section>
 
-      {/* Diagonal divider matching site style — dark hero into a contrasting warm section */}
       <SectionDivider variant="slant" className="bg-primary text-brand-warm -mt-px -mb-px" />
 
-      {/* ═══════ TREATMENTS GRID ═══════ */}
       <section className="relative section-padding overflow-hidden">
         <div className="absolute inset-0 section-warm" />
         <div className="absolute inset-0 pointer-events-none">
@@ -383,7 +387,7 @@ const LPHealthKidsPage = () => {
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-12">
             <Link
-              to="/lp/health-kids/check"
+              to={checkPath}
               className="inline-flex items-center gap-3 bg-accent text-accent-foreground px-10 py-4 rounded-full font-bold text-xl hover:brightness-110 transition-all shadow-2xl hover:shadow-accent/30 animate-pulse-glow"
             >
               <ArrowLeft className="w-6 h-6" />
@@ -393,46 +397,29 @@ const LPHealthKidsPage = () => {
         </div>
       </section>
 
-      {/* Soft transition: warm → dark navy */}
       <SectionDivider variant="slant" className="bg-brand-warm text-primary -mt-px -mb-px" />
 
-      {/* ═══════ MATH ═══════ */}
       <section className="relative py-16 md:py-24 overflow-hidden">
-        {/* Subtle, premium dark background — same family as the hero squeeze page */}
         <div className="absolute inset-0">
-          <img
-            src={heroBg}
-            alt=""
-            aria-hidden="true"
-            className="w-full h-full object-cover opacity-30"
-            loading="lazy"
-          />
+          <img src={heroBg} alt="" aria-hidden="true" className="w-full h-full object-cover opacity-30" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary))] via-[hsl(var(--brand-navy))] to-[hsl(var(--primary))]" />
           <div className="absolute inset-0 opacity-90" style={{
             background: "radial-gradient(ellipse at 30% 20%, hsl(var(--brand-teal) / 0.18) 0%, transparent 55%), radial-gradient(ellipse at 70% 80%, hsl(var(--brand-gold) / 0.12) 0%, transparent 55%)"
           }} />
         </div>
         <div className="absolute inset-0 dot-pattern opacity-[0.07]" />
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[12%] left-[6%] w-72 h-72 rounded-full border border-primary-foreground/5 animate-spin-slow" />
-          <div className="absolute bottom-[8%] right-[8%] w-56 h-56 rounded-full border border-brand-teal/10 animate-spin-slow" style={{ animationDirection: "reverse" }} />
-        </div>
         <div className="container mx-auto px-4 max-w-3xl relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center space-y-6">
             <motion.h2 variants={fadeUp} custom={0} className="font-heading text-2xl md:text-4xl font-black text-primary-foreground">
-              25 שקלים בחודש. <span className="text-brand-gold">החזרים של אלפים.</span>
+              30 שקלים בחודש. <span className="text-brand-gold">החזרים של אלפים.</span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={1} className="text-primary-foreground/75 text-base md:text-lg">
               המתמטיקה פשוטה — ההפסד של לא להיות מבוטחים הוא המון כסף בכל שנה.
             </motion.p>
 
-            <motion.div
-              variants={fadeUp}
-              custom={2}
-              className="glass-dark p-6 md:p-7 text-right space-y-3 max-w-xl mx-auto"
-            >
+            <motion.div variants={fadeUp} custom={2} className="glass-dark p-6 md:p-7 text-right space-y-3 max-w-xl mx-auto">
               {[
-                "25 ש״ח בחודש — לכל ילד במשפחה (לא לכל הילדים יחד)",
+                "30 ש״ח בחודש — לכל ילד במשפחה (לא לכל הילדים יחד)",
                 "כיסוי למגוון רחב של אבחונים וטיפולים התפתחותיים",
                 "אפשרות להוסיף לביטוח בריאות קיים — בלי לשנות שום דבר",
                 "אנחנו מלווים אתכם בכל תהליך הגשת התביעה",
@@ -445,16 +432,14 @@ const LPHealthKidsPage = () => {
             </motion.div>
 
             <motion.div variants={fadeUp} custom={3} className="pt-4">
-              <NeedSelectCTA variant="dark" />
+              <NeedSelectCTA variant="dark" campaignId={campaignId} checkPath={checkPath} />
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Soft transition back to warm */}
       <SectionDivider variant="slant" className="bg-primary text-brand-warm -mt-px -mb-px" />
 
-      {/* ═══════ COST BLOCK ═══════ */}
       <section className="relative section-padding overflow-hidden">
         <div className="absolute inset-0 section-warm" />
         <div className="absolute inset-0 pointer-events-none">
@@ -470,7 +455,7 @@ const LPHealthKidsPage = () => {
               עלות הכיסוי
             </motion.h2>
             <motion.div variants={fadeUp} custom={2} className="flex flex-col items-center">
-              <p className="text-brand-gold text-6xl md:text-7xl font-black leading-none">25 ש״ח</p>
+              <p className="text-brand-gold text-6xl md:text-7xl font-black leading-none">30 ש״ח</p>
               <p className="text-foreground/80 text-lg mt-2">בחודש — לכל ילד</p>
             </motion.div>
             <motion.p variants={fadeUp} custom={3} className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-xl mx-auto">
@@ -480,7 +465,7 @@ const LPHealthKidsPage = () => {
             </motion.p>
             <motion.div variants={fadeUp} custom={4}>
               <Link
-                to="/lp/health-kids/check"
+                to={checkPath}
                 className="inline-flex items-center gap-3 bg-accent text-accent-foreground px-10 py-4 rounded-full font-bold text-xl hover:brightness-110 transition-all shadow-2xl hover:shadow-accent/30 animate-pulse-glow mt-4"
               >
                 <ArrowLeft className="w-6 h-6" />
@@ -493,7 +478,6 @@ const LPHealthKidsPage = () => {
 
       <SectionDivider variant="slant" className="text-background -mt-1 rotate-180" />
 
-      {/* ═══════ EMOTIONAL PAIN ═══════ */}
       <section className="relative py-14 md:py-20 bg-background overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[20%] right-[10%] w-72 h-72 rounded-full bg-brand-red/10 blur-[120px]" />
@@ -524,11 +508,11 @@ const LPHealthKidsPage = () => {
             <p className="text-foreground text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
               ההורות הכי קשה היא כשמרגישים שהארנק מקבל החלטות במקום הלב.
               <br />
-              <span className="font-bold">25 ש״ח בחודש</span> מורידים את ההתלבטות הזו מעל הכתפיים שלכם — לתמיד.
+              <span className="font-bold">30 ש״ח בחודש</span> מורידים את ההתלבטות הזו מעל הכתפיים שלכם — לתמיד.
             </p>
             <div className="pt-2">
               <Link
-                to="/lp/health-kids/check"
+                to={checkPath}
                 className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-3.5 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg hover:shadow-accent/30 animate-pulse-glow"
               >
                 בדקו זכאות עכשיו
@@ -539,10 +523,8 @@ const LPHealthKidsPage = () => {
         </div>
       </section>
 
-      {/* ═══════ FAQ ═══════ */}
       <FAQSection title="שאלות שהורים שואלים אותנו" items={faqs} />
 
-      {/* ═══════ FINAL CTA ═══════ */}
       <section className="py-14 md:py-16 bg-background">
         <div className="container mx-auto px-4 max-w-2xl text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-black mb-4">
@@ -552,7 +534,7 @@ const LPHealthKidsPage = () => {
             הבדיקה לוקחת פחות מדקה. אם מגיע לכם — נציג לכם איך להוסיף את הכיסוי בעלות זניחה.
           </p>
           <Link
-            to="/lp/health-kids/check"
+            to={checkPath}
             className="inline-flex items-center gap-3 bg-accent text-accent-foreground px-10 py-4 rounded-full font-bold text-xl hover:brightness-110 transition-all shadow-2xl hover:shadow-accent/30 animate-pulse-glow"
           >
             <Sparkles className="w-5 h-5" />
@@ -561,11 +543,10 @@ const LPHealthKidsPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="relative py-8 overflow-hidden">
         <div className="absolute inset-0 section-dark" />
         <div className="relative z-10 container mx-auto px-4 text-center space-y-4">
-          <img src={logo} alt={`לוגו ${siteConfig.name}`} className="h-10 mx-auto opacity-70" loading="lazy" />
+          <HealthKidsBrandHeader campaign={campaign} className="opacity-90" logoClassName="h-10" />
           <div className="flex items-center justify-center gap-4 text-primary-foreground/50 text-sm">
             <Link to="/privacy-policy" className="hover:text-primary-foreground/80 transition-colors">מדיניות פרטיות</Link>
             <span>|</span>
@@ -580,4 +561,4 @@ const LPHealthKidsPage = () => {
   );
 };
 
-export default LPHealthKidsPage;
+export default LPHealthKidsCampaignPage;

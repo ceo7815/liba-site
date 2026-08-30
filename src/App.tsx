@@ -44,6 +44,10 @@ const LPHealthKidsPage = lazy(() => import("./pages/LPHealthKidsPage"));
 const LPHealthKidsNeedsPage = lazy(() => import("./pages/LPHealthKidsNeedsPage"));
 const LPHealthKidsCheckPage = lazy(() => import("./pages/LPHealthKidsCheckPage"));
 const LPHealthKidsThankYouPage = lazy(() => import("./pages/LPHealthKidsThankYouPage"));
+const LPHealthKidsCampaignPage = lazy(() => import("./pages/healthKids/LPHealthKidsCampaignPage"));
+const LPHealthKidsCampaignNeedsPage = lazy(() => import("./pages/healthKids/LPHealthKidsCampaignNeedsPage"));
+const LPHealthKidsCampaignCheckPage = lazy(() => import("./pages/healthKids/LPHealthKidsCampaignCheckPage"));
+const LPHealthKidsCampaignThankYouPage = lazy(() => import("./pages/healthKids/LPHealthKidsCampaignThankYouPage"));
 const LPAthletePage = lazy(() => import("./pages/LPAthletePage"));
 const LPAthleteThankYouPage = lazy(() => import("./pages/LPAthleteThankYouPage"));
 const LPInsuranceCheckPage = lazy(() => import("./pages/LPInsuranceCheckPage"));
@@ -78,6 +82,14 @@ const App = () => (
             <Route path="/lp/health-kids/needs" element={<><LPHealthKidsNeedsPage /><CookieConsent /><AccessibilityWidget /></>} />
             <Route path="/lp/health-kids/check" element={<><LPHealthKidsCheckPage /><CookieConsent /><AccessibilityWidget /></>} />
             <Route path="/lp/health-kids/thank-you" element={<><LPHealthKidsThankYouPage /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-migdal" element={<><LPHealthKidsCampaignPage campaignId="migdal" /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-migdal/needs" element={<><LPHealthKidsCampaignNeedsPage campaignId="migdal" /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-migdal/check" element={<><LPHealthKidsCampaignCheckPage campaignId="migdal" /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-migdal/thank-you" element={<><LPHealthKidsCampaignThankYouPage campaignId="migdal" /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-partners" element={<><LPHealthKidsCampaignPage campaignId="partners" /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-partners/needs" element={<><LPHealthKidsCampaignNeedsPage campaignId="partners" /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-partners/check" element={<><LPHealthKidsCampaignCheckPage campaignId="partners" /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/health-kids-partners/thank-you" element={<><LPHealthKidsCampaignThankYouPage campaignId="partners" /><CookieConsent /><AccessibilityWidget /></>} />
             <Route path="/athlete-pack" element={<><LPAthletePage /><CookieConsent /><AccessibilityWidget /></>} />
             <Route path="/athlete-thankyou" element={<><LPAthleteThankYouPage /><CookieConsent /><AccessibilityWidget /></>} />
             <Route path="/insurance-check" element={<><LPInsuranceCheckPage /><CookieConsent /><AccessibilityWidget /></>} />

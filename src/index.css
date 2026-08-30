@@ -131,6 +131,22 @@
 }
 
 @layer utilities {
+  .select-trigger-center {
+    justify-content: center !important;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .select-trigger-center > span {
+    display: block !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+    -webkit-box-orient: initial !important;
+    max-width: calc(100% - 1.75rem);
+    text-align: center;
+  }
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-l from-primary to-accent;
   }
