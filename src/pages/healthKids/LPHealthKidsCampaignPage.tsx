@@ -20,9 +20,12 @@ import SEOHead from "@/components/SEOHead";
 import SectionDivider from "@/components/SectionDivider";
 import FAQSection from "@/components/FAQSection";
 import HealthKidsBrandHeader from "@/components/health-kids/HealthKidsBrandHeader";
+import MigdalHealthKidsLanding from "@/pages/healthKids/MigdalHealthKidsLanding";
 import {
   HEALTH_KIDS_CAMPAIGNS,
   healthKidsNeedStorageKey,
+  campaignShellClass,
+  healthKidsHeroOverlayStyle,
   type HealthKidsCampaignId,
 } from "@/data/healthKidsCampaigns";
 import {
@@ -221,12 +224,21 @@ const faqs = [
 const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampaignId }) => {
   const campaign = HEALTH_KIDS_CAMPAIGNS[campaignId];
   const checkPath = `${campaign.basePath}/check`;
+  const isMigdal = campaign.showMigdal;
   useClarityPageTags({ pageType: "landing-page", lpCampaign: campaign.clarityCampaign, funnelStep: "intro" });
 
+  if (isMigdal) {
+    return <MigdalHealthKidsLanding campaign={campaign} />;
+  }
+
   return (
-    <main className="bg-background" dir="rtl">
+    <main className={`bg-background ${campaignShellClass(isMigdal)}`} dir="rtl">
       <SEOHead
-        title="כתב שירות 'התפתחות הילד' — 30 ש״ח לילד, החזרים של אלפי ש״ח | ליבה ביטוח ופנסיוני"
+        title={
+          isMigdal
+            ? "מגדל | כתב שירות התפתחות הילד — 30 ש״ח לילד | בשיתוף סוכנות ליבה"
+            : "כתב שירות 'התפתחות הילד' — 30 ש״ח לילד, החזרים של אלפי ש״ח | ליבה ביטוח ופנסיוני"
+        }
         description="הורים — מגיע לכם החזרים של מאות עד אלפי שקלים על אבחונים וטיפולים לילדים. אבחון דידקטי, קלינאית תקשורת, טיפול רגשי ועוד. בדיקת זכאות חינם."
         canonical={campaign.basePath}
         keywords={[
@@ -242,10 +254,12 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
         noindex
       />
 
+      {isMigdal && <HealthKidsBrandHeader campaign={campaign} variant="bar" />}
+
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroBg} alt="כתב שירות התפתחות הילד — בדיקת זכאות" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-l from-[hsl(205,65%,12%)] via-[hsl(205,65%,15%,0.92)] to-[hsl(205,65%,18%,0.75)]" />
+          <div className="absolute inset-0" style={healthKidsHeroOverlayStyle} />
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -263,7 +277,7 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
         <div className="relative container mx-auto px-4 py-24">
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl mx-auto text-center">
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-              <HealthKidsBrandHeader campaign={campaign} />
+              {!isMigdal && <HealthKidsBrandHeader campaign={campaign} />}
             </motion.div>
 
             <motion.div
@@ -279,17 +293,27 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
 
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-teal/20 border border-brand-teal/30 text-brand-teal mb-5 text-sm font-medium">
               <Baby className="w-4 h-4" />
-              הורים — חייבים לקרוא
+              {isMigdal ? "מגדל — כתב שירות התפתחות הילד" : "הורים — חייבים לקרוא"}
             </div>
 
             <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl font-black text-primary-foreground leading-tight mb-5">
-              מגיע לכם <span className="text-accent">החזרים של אלפי שקלים</span>
-              <br className="hidden md:block" /> על אבחונים וטיפולים לילדים
+              {isMigdal ? (
+                <>
+                  עם <span className="text-accent">מגדל</span> מגיע לכם
+                  <br className="hidden md:block" /> החזרים של אלפי שקלים על אבחונים וטיפולים לילדים
+                </>
+              ) : (
+                <>
+                  מגיע לכם <span className="text-accent">החזרים של אלפי שקלים</span>
+                  <br className="hidden md:block" /> על אבחונים וטיפולים לילדים
+                </>
+              )}
             </h1>
 
             <p className="text-base md:text-xl text-primary-foreground/85 mb-8 leading-relaxed max-w-2xl mx-auto">
               אבחון קשב וריכוז, טיפול רגשי, קלינאית תקשורת, רכיבה טיפולית, הדרכת הורים — כל אלה מכוסים בכתב שירות
-              ״התפתחות הילד״. <span className="text-brand-gold font-bold">רק 30 ש״ח בחודש לכל ילד.</span>
+              {isMigdal ? " ״התפתחות הילד״ של מגדל. " : " ״התפתחות הילד״. "}
+              <span className="text-brand-gold font-bold">רק 30 ש״ח בחודש לכל ילד.</span>
             </p>
 
             <motion.div
@@ -344,7 +368,11 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
         <div className="relative z-10 container mx-auto px-4 max-w-6xl">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12 space-y-4">
             <motion.h2 variants={fadeUp} custom={0} className="font-heading text-2xl md:text-4xl font-black text-foreground">
-              מה <span className="text-brand-gold">באמת מכוסה</span> בכתב השירות?
+              {isMigdal ? (
+                <>מה <span className="text-accent">באמת מכוסה</span> בכתב השירות של מגדל?</>
+              ) : (
+                <>מה <span className="text-brand-gold">באמת מכוסה</span> בכתב השירות?</>
+              )}
             </motion.h2>
             <motion.p variants={fadeUp} custom={1} className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
               עשרות טיפולים ואבחונים שמגיעים לילדים שלכם — מותאם גם למי שיש לו כבר ביטוח בריאות וגם למי שעוד אין.
@@ -411,7 +439,11 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
         <div className="container mx-auto px-4 max-w-3xl relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center space-y-6">
             <motion.h2 variants={fadeUp} custom={0} className="font-heading text-2xl md:text-4xl font-black text-primary-foreground">
-              30 שקלים בחודש. <span className="text-brand-gold">החזרים של אלפים.</span>
+              {isMigdal ? (
+                <>כיסוי מגדל — 30 שקלים בחודש. <span className="text-accent">החזרים של אלפים.</span></>
+              ) : (
+                <>30 שקלים בחודש. <span className="text-brand-gold">החזרים של אלפים.</span></>
+              )}
             </motion.h2>
             <motion.p variants={fadeUp} custom={1} className="text-primary-foreground/75 text-base md:text-lg">
               המתמטיקה פשוטה — ההפסד של לא להיות מבוטחים הוא המון כסף בכל שנה.
@@ -452,7 +484,7 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
               <ShieldCheck className="w-10 h-10" />
             </motion.div>
             <motion.h2 variants={fadeUp} custom={1} className="font-heading text-2xl md:text-4xl font-black text-foreground">
-              עלות הכיסוי
+              {isMigdal ? "עלות הכיסוי במגדל" : "עלות הכיסוי"}
             </motion.h2>
             <motion.div variants={fadeUp} custom={2} className="flex flex-col items-center">
               <p className="text-brand-gold text-6xl md:text-7xl font-black leading-none">30 ש״ח</p>
@@ -523,12 +555,20 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
         </div>
       </section>
 
-      <FAQSection title="שאלות שהורים שואלים אותנו" items={faqs} />
+      <FAQSection
+        title="שאלות שהורים שואלים אותנו"
+        items={faqs}
+        eyebrow={isMigdal ? "מגדל" : undefined}
+      />
 
       <section className="py-14 md:py-16 bg-background">
         <div className="container mx-auto px-4 max-w-2xl text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-black mb-4">
-            הילדים שלכם <span className="text-gradient-accent">שווים את הבדיקה.</span>
+            {isMigdal ? (
+              <>הילדים שלכם שווים את הבדיקה. <span className="text-accent">עם מגדל.</span></>
+            ) : (
+              <>הילדים שלכם <span className="text-gradient-accent">שווים את הבדיקה.</span></>
+            )}
           </h2>
           <p className="text-muted-foreground text-base md:text-lg mb-6">
             הבדיקה לוקחת פחות מדקה. אם מגיע לכם — נציג לכם איך להוסיף את הכיסוי בעלות זניחה.
@@ -543,18 +583,25 @@ const LPHealthKidsCampaignPage = ({ campaignId }: { campaignId: HealthKidsCampai
         </div>
       </section>
 
-      <footer className="relative py-8 overflow-hidden">
-        <div className="absolute inset-0 section-dark" />
+      <footer className={`relative py-8 overflow-hidden ${isMigdal ? "bg-white border-t-4 border-[hsl(var(--primary))]" : ""}`}>
+        {!isMigdal && <div className="absolute inset-0 section-dark" />}
         <div className="relative z-10 container mx-auto px-4 text-center space-y-4">
-          <HealthKidsBrandHeader campaign={campaign} className="opacity-90" logoClassName="h-10" />
-          <div className="flex items-center justify-center gap-4 text-primary-foreground/50 text-sm">
-            <Link to="/privacy-policy" className="hover:text-primary-foreground/80 transition-colors">מדיניות פרטיות</Link>
+          <HealthKidsBrandHeader
+            campaign={campaign}
+            className={isMigdal ? "" : "opacity-90"}
+            logoClassName="h-10"
+            variant={isMigdal ? "footer" : "inline"}
+          />
+          <div className={`flex items-center justify-center gap-4 text-sm ${isMigdal ? "text-[hsl(var(--primary))]/70" : "text-primary-foreground/50"}`}>
+            <Link to="/privacy-policy" className="hover:opacity-80 transition-colors">מדיניות פרטיות</Link>
             <span>|</span>
-            <Link to="/terms" className="hover:text-primary-foreground/80 transition-colors">תנאי שימוש</Link>
+            <Link to="/terms" className="hover:opacity-80 transition-colors">תנאי שימוש</Link>
             <span>|</span>
-            <Link to="/accessibility" className="hover:text-primary-foreground/80 transition-colors">הצהרת נגישות</Link>
+            <Link to="/accessibility" className="hover:opacity-80 transition-colors">הצהרת נגישות</Link>
           </div>
-          <p className="text-primary-foreground/40 text-xs">© {new Date().getFullYear()} {siteConfig.name}. כל הזכויות שמורות.</p>
+          <p className={`text-xs ${isMigdal ? "text-[hsl(var(--primary))]/50" : "text-primary-foreground/40"}`}>
+            © {new Date().getFullYear()} {isMigdal ? "מגדל חברה לביטוח · בשיתוף סוכנות ליבה" : `${siteConfig.name}. כל הזכויות שמורות.`}
+          </p>
         </div>
       </footer>
     </main>

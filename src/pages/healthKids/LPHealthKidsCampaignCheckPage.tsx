@@ -6,9 +6,11 @@ import SEOHead from "@/components/SEOHead";
 import { siteConfig } from "@/data/siteConfig";
 import { useToast } from "@/hooks/use-toast";
 import HealthKidsBrandHeader from "@/components/health-kids/HealthKidsBrandHeader";
+import { MigdalShell } from "@/components/health-kids/MigdalShell";
 import {
   HEALTH_KIDS_CAMPAIGNS,
   healthKidsNeedStorageKey,
+  healthKidsHeroOverlayStyle,
   type HealthKidsCampaignId,
 } from "@/data/healthKidsCampaigns";
 import { isValidIsraeliPhone, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
@@ -31,6 +33,7 @@ const CHILDREN_OPTIONS = ["1", "2", "3", "4", "5+"];
 
 const LPHealthKidsCampaignCheckPage = ({ campaignId }: { campaignId: HealthKidsCampaignId }) => {
   const campaign = HEALTH_KIDS_CAMPAIGNS[campaignId];
+  const isMigdal = campaign.showMigdal;
   useClarityPageTags({ pageType: "landing-page", lpCampaign: campaign.clarityCampaign, funnelStep: "check" });
 
   const [submitted, setSubmitted] = useState(false);
@@ -129,34 +132,49 @@ const LPHealthKidsCampaignCheckPage = ({ campaignId }: { campaignId: HealthKidsC
     }
   };
 
-  const inputClass = "w-full px-4 py-3.5 rounded-xl border border-border bg-popover text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 text-base";
-  const selectClass = "w-full px-4 py-3.5 rounded-xl border border-border bg-popover text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 text-base";
+  const inputClass = isMigdal
+    ? "w-full px-4 py-3.5 rounded-lg border border-[#020140]/15 bg-white text-[#020140] placeholder:text-[#020140]/40 focus:outline-none focus:ring-2 focus:ring-[#a2eb9a] text-base"
+    : "w-full px-4 py-3.5 rounded-xl border border-border bg-popover text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 text-base";
+  const selectClass = isMigdal
+    ? "w-full px-4 py-3.5 rounded-lg border border-[#020140]/15 bg-white text-[#020140] focus:outline-none focus:ring-2 focus:ring-[#a2eb9a] text-base"
+    : "w-full px-4 py-3.5 rounded-xl border border-border bg-popover text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 text-base";
 
   if (submitted) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-background" dir="rtl">
+      <main className={`min-h-screen flex items-center justify-center ${isMigdal ? "migdal-lp" : "bg-background"}`} dir="rtl">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
-          <CheckCircle className="w-16 h-16 text-brand-teal mx-auto mb-4" />
+          <CheckCircle className={`w-16 h-16 mx-auto mb-4 ${isMigdal ? "text-[#3d9a45]" : "text-brand-teal"}`} />
           <h2 className="font-heading text-2xl font-bold mb-2">הבקשה נשלחה בהצלחה!</h2>
-          <p className="text-muted-foreground">מעבירים אותך...</p>
+          <p className={isMigdal ? "text-[#020140]/60" : "text-muted-foreground"}>מעבירים אותך...</p>
         </motion.div>
       </main>
     );
   }
 
-  return (
-    <main className="min-h-screen bg-background" dir="rtl">
+  const pageBody = (
+    <>
       <SEOHead
-        title="בדיקת זכאות — כתב שירות התפתחות הילד | ליבה ביטוח ופנסיוני"
+        title={isMigdal ? "בדיקת זכאות — מגדל התפתחות הילד | בשיתוף סוכנות ליבה" : "בדיקת זכאות — כתב שירות התפתחות הילד | ליבה ביטוח ופנסיוני"}
         description="מלאו פרטים קצרים ונבדוק זכאות מלאה להחזרים על אבחונים וטיפולים לילדים."
         canonical={`${campaign.basePath}/check`}
         noindex
       />
 
+      {isMigdal ? (
+        <section className="migdal-hero-canvas py-12 md:py-14">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-sm font-bold text-[#020140]/55 mb-3">מגדל — שלב 2 מתוך 2</p>
+            <h1 className="font-heading text-2xl md:text-4xl font-black text-[#020140] mb-2">
+              השאירו פרטים לבדיקת זכאות במגדל
+            </h1>
+            <p className="text-[#020140]/70">נציג מסוכנות ליבה יבדוק מול מגדל ויחזור אליכם תוך מספר שעות</p>
+          </div>
+        </section>
+      ) : (
       <section className="relative py-14 md:py-16 overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroBg} alt="" aria-hidden="true" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-l from-[hsl(205,65%,12%)] via-[hsl(205,65%,15%,0.92)] to-[hsl(205,65%,18%,0.75)]" />
+          <div className="absolute inset-0" style={healthKidsHeroOverlayStyle} />
         </div>
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[10%] left-[5%] w-60 h-60 rounded-full border-2 border-dashed border-brand-teal/20 animate-spin-slow" />
@@ -180,11 +198,12 @@ const LPHealthKidsCampaignCheckPage = ({ campaignId }: { campaignId: HealthKidsC
           </div>
         </div>
       </section>
+      )}
 
       <div className="container mx-auto px-4 py-10 md:py-14 max-w-lg">
         <motion.form
           onSubmit={handleSubmit}
-          className="space-y-4"
+          className={`space-y-4 ${isMigdal ? "bg-white rounded-2xl p-6 md:p-8 shadow-[0_12px_40px_rgba(2,1,64,0.08)]" : ""}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
@@ -291,7 +310,11 @@ const LPHealthKidsCampaignCheckPage = ({ campaignId }: { campaignId: HealthKidsC
           <button
             type="submit"
             disabled={sending}
-            className="w-full flex items-center justify-center gap-2 bg-accent text-accent-foreground py-4 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg animate-pulse-glow disabled:opacity-60"
+            className={
+              isMigdal
+                ? "migdal-cta w-full flex items-center justify-center gap-2 py-4 text-lg disabled:opacity-60"
+                : "w-full flex items-center justify-center gap-2 bg-accent text-accent-foreground py-4 rounded-full font-bold text-lg hover:brightness-110 transition-all shadow-lg animate-pulse-glow disabled:opacity-60"
+            }
           >
             {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             {sending ? "שולח..." : "בדקו את הזכאות שלי"}
@@ -309,22 +332,31 @@ const LPHealthKidsCampaignCheckPage = ({ campaignId }: { campaignId: HealthKidsC
         </p>
       </div>
 
+      {!isMigdal && (
       <footer className="relative py-8 overflow-hidden">
         <div className="absolute inset-0 section-dark" />
         <div className="relative z-10 container mx-auto px-4 text-center space-y-4">
           <HealthKidsBrandHeader campaign={campaign} className="opacity-90" logoClassName="h-10" />
-          <div className="flex items-center justify-center gap-4 text-primary-foreground/50 text-sm">
-            <Link to="/privacy-policy" className="hover:text-primary-foreground/80 transition-colors">מדיניות פרטיות</Link>
+          <div className="flex items-center justify-center gap-4 text-sm text-primary-foreground/50">
+            <Link to="/privacy-policy" className="hover:opacity-80 transition-colors">מדיניות פרטיות</Link>
             <span>|</span>
-            <Link to="/terms" className="hover:text-primary-foreground/80 transition-colors">תנאי שימוש</Link>
+            <Link to="/terms" className="hover:opacity-80 transition-colors">תנאי שימוש</Link>
             <span>|</span>
-            <Link to="/accessibility" className="hover:text-primary-foreground/80 transition-colors">הצהרת נגישות</Link>
+            <Link to="/accessibility" className="hover:opacity-80 transition-colors">הצהרת נגישות</Link>
           </div>
-          <p className="text-primary-foreground/40 text-xs">© {new Date().getFullYear()} {siteConfig.name}. כל הזכויות שמורות.</p>
+          <p className="text-xs text-primary-foreground/40">
+            © {new Date().getFullYear()} {siteConfig.name}. כל הזכויות שמורות.
+          </p>
         </div>
       </footer>
-    </main>
+      )}
+    </>
   );
+
+  if (isMigdal) {
+    return <MigdalShell campaign={campaign}>{pageBody}</MigdalShell>;
+  }
+  return <main className="min-h-screen bg-background" dir="rtl">{pageBody}</main>;
 };
 
 export default LPHealthKidsCampaignCheckPage;

@@ -18,7 +18,7 @@ export const HEALTH_KIDS_CAMPAIGNS: Record<HealthKidsCampaignId, HealthKidsCampa
     backupSource: "lp-health-kids-migdal",
     webhookUrl: "https://hook.eu2.make.com/s9jb67ncliucy17wboal0z9mc6xm1vpw",
     showMigdal: true,
-    partnerLabel: "סוכנות ליבה בשיתוף מגדל",
+    partnerLabel: "כתב שירות של מגדל · בשיתוף סוכנות ליבה",
   },
   partners: {
     id: "partners",
@@ -33,3 +33,11 @@ export const HEALTH_KIDS_CAMPAIGNS: Record<HealthKidsCampaignId, HealthKidsCampa
 
 export const healthKidsNeedStorageKey = (campaignId: HealthKidsCampaignId) =>
   `hk_need_${campaignId}`;
+
+export const campaignShellClass = (showMigdal: boolean) =>
+  showMigdal ? "migdal-lp" : "";
+
+export const healthKidsHeroOverlayStyle = {
+  background:
+    "linear-gradient(to left, hsl(var(--brand-navy)) 0%, hsl(var(--primary) / 0.94) 48%, hsl(var(--primary) / 0.8) 100%)",
+};
