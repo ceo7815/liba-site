@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 import type { HealthKidsCampaign } from "@/data/healthKidsCampaigns";
+import { siteConfig } from "@/data/siteConfig";
 import migdalLogo from "@/assets/migdal-logo.png";
+import libaLogo from "@/assets/logo.png";
 
 export const MigdalShell = ({
   campaign,
@@ -20,10 +22,15 @@ export const MigdalShell = ({
       </div>
       <div className="border-b-[3px] border-[#a2eb9a] shadow-[0_4px_16px_rgba(2,1,64,0.06)]">
         <div className="container mx-auto px-4 h-[68px] md:h-[80px] flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4 min-w-0">
+          <div className="flex items-center gap-3 md:gap-4 min-w-0">
             <img src={migdalLogo} alt="מגדל חברה לביטוח" className="h-11 md:h-[52px] w-auto object-contain shrink-0" />
-            <span className="hidden sm:block w-px h-9 bg-[#d7deea]" aria-hidden />
-            <div className="hidden sm:block min-w-0">
+            <span className="w-px h-8 md:h-9 bg-[#d7deea]" aria-hidden />
+            <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+              <span className="text-[10px] md:text-xs text-[#020140]/55 leading-none">בשיתוף</span>
+              <img src={libaLogo} alt={`סוכנות ${siteConfig.name}`} className="h-7 md:h-9 w-auto object-contain" />
+            </div>
+            <span className="hidden md:block w-px h-9 bg-[#d7deea]" aria-hidden />
+            <div className="hidden md:block min-w-0">
               <p className="text-sm md:text-base font-bold text-[#020140] leading-tight truncate">
                 כתב שירות התפתחות הילד
               </p>

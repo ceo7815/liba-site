@@ -13,6 +13,7 @@ import {
   Activity,
   HelpCircle,
   Baby,
+  HeartCrack,
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { MigdalShell } from "@/components/health-kids/MigdalShell";
@@ -132,7 +133,8 @@ const MigdalHealthKidsLanding = ({ campaign }: { campaign: HealthKidsCampaign })
                 <span className="text-sm font-bold tracking-wide">רק במגדל</span>
               </div>
               <h1 className="font-heading text-3xl md:text-5xl font-black text-[#020140] leading-[1.15] mb-4">
-                כתב שירות התפתחות הילד שמשנה את חוקי המשחק
+                מגיע לכם החזרים של אלפי שקלים
+                <span className="block">על אבחונים וטיפולים לילדים</span>
               </h1>
               <p className="text-base md:text-lg text-[#020140]/80 leading-relaxed mb-6">
                 אבחון קשב, טיפול רגשי, קלינאית תקשורת, רכיבה טיפולית והדרכת הורים — מכוסים בכתב השירות של מגדל.
@@ -197,6 +199,38 @@ const MigdalHealthKidsLanding = ({ campaign }: { campaign: HealthKidsCampaign })
           </div>
           <div className="text-center mt-10">
             <LimeButton to={checkPath}>מעניין, ספרו לי עוד</LimeButton>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-20 bg-[#eef2f6]">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <div className="bg-white rounded-2xl p-7 md:p-10 text-center space-y-5 shadow-[0_12px_40px_rgba(2,1,64,0.08)]">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-[#eef2f6] text-[#020140] mx-auto">
+              <HeartCrack className="w-7 h-7" />
+            </div>
+            <h2 className="font-heading text-2xl md:text-4xl font-black text-[#020140] leading-tight">
+              לחסוך מהילד משהו שהוא <span className="text-[#3d9a45]">באמת צריך</span> — רק בגלל המחיר?
+            </h2>
+            <p className="text-[#020140]/75 text-base md:text-lg leading-relaxed">
+              דמיינו את עצמכם יושבים מול המטפלת ושואלים את עצמכם
+              {" "}
+              <span className="text-[#020140] font-bold">"כמה טיפולים אנחנו יכולים להרשות לעצמנו החודש?"</span>
+              {" "}
+              במקום לשאול את השאלה היחידה שצריכה להישאל —
+              {" "}
+              <span className="text-[#3d9a45] font-black">כמה טיפולים הוא צריך?</span>
+            </p>
+            <p className="text-[#020140]/80 text-base md:text-lg leading-relaxed">
+              ההורות הכי קשה היא כשמרגישים שהארנק מקבל החלטות במקום הלב.
+              {" "}
+              <strong className="text-[#020140]">30 ש״ח בחודש</strong>
+              {" "}
+              מורידים את ההתלבטות הזו מעל הכתפיים שלכם — לתמיד.
+            </p>
+            <div className="pt-1">
+              <LimeButton to={checkPath}>בדקו זכאות עכשיו</LimeButton>
+            </div>
           </div>
         </div>
       </section>
