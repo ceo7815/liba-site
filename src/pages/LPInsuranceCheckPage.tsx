@@ -158,8 +158,8 @@ const LPInsuranceCheckPage = () => {
   return (
     <main className="min-h-screen bg-background flex flex-col" dir="rtl">
       <SEOHead
-        title="בדיקת כפל ביטוחי — כמה אפשר להוזיל את הביטוח שלך?"
-        description="שאלון קצר לבדיקה האם ניתן להוזיל את ביטוח הבריאות והחיים שלך ולמנוע כפל ביטוחי."
+        title="עשיתם ביטוח לפני 2024? ייתכן שאתם משלמים יותר ממה שצריך"
+        description="ענו על שאלון קצר וקבלו מיד תשובה האם ניתן להוזיל את ביטוחי החיים והבריאות שלכם במאות ואלפי שקלים בשנה. בדיקה מהירה ללא עלות וללא התחייבות."
         canonical="/insurance-check"
         noindex
       />
@@ -203,8 +203,14 @@ const LPInsuranceCheckPage = () => {
                     נתוני הכנסת
                   </p>
                   <h1 className="font-heading text-3xl md:text-5xl font-black leading-tight mb-3">
-                    לפי נתונים שפורסמו בכנסת כ41% מהישראלים משלמים על כפל ביטוחי
+                    עשיתם ביטוח לפני 2024? ייתכן שאתם משלמים יותר ממה שצריך
                   </h1>
+                  <p className="text-base md:text-lg text-foreground/90 leading-relaxed mb-3">
+                    כפל ביטוחי, ביטוחי יתר ופוליסות ישנות עלולים לגרום לכם לשלם מאות שקלים מיותרים בכל חודש (בלי שתדעו)
+                  </p>
+                  <p className="text-base md:text-lg text-foreground/90 leading-relaxed mb-6">
+                    לפי נתונים שפורסמו בכנסת, כ־41% מהישראלים (כמעט כל אדם שני) משלמים על כפל ביטוחי או ביטוחי יתר.
+                  </p>
                   <figure className="mb-6 rounded-xl overflow-hidden border border-border bg-card">
                     <img
                       src={knessetArticle}
@@ -224,9 +230,8 @@ const LPInsuranceCheckPage = () => {
                   </button>
 
                   <div className="border-y border-border py-4 space-y-3 text-base md:text-lg text-foreground/90 leading-relaxed">
-                    <p className="font-semibold text-foreground">כמעט כל ישראלי שני עלול לשלם יותר ממה שצריך על ביטוחים.</p>
-                    <p>ענו על שאלון קצר וקבלו מיד תשובה האם גם אצלכם יש פוטנציאל להוזלה בביטוחי הבריאות והחיים ובכמה ניתן להוזיל (ללא התחייבות)</p>
-                    <p>&nbsp;</p>
+                    <p className="font-semibold text-foreground">ענו על שאלון קצר וקבלו מיד תשובה האם ניתן להוזיל את ביטוחי החיים והבריאות שלכם במאות ואלפי שקלים בשנה</p>
+                    <p>*בדיקה מהירה ללא עלות וללא התחייבות</p>
                   </div>
 
                   <div ref={questionsRef} className="mt-4 scroll-mt-28">
