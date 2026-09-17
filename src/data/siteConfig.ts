@@ -53,7 +53,12 @@ export const servicesMenu = [
     title: "זכויות והחזרים",
     hubHref: "/services/rights",
     items: [
-      { label: "מיצוי זכויות", href: "/services/rights/rights-realization" },
+      { label: "סקירה כללית", href: "/services/rights/rights-realization" },
+      { label: "משיכת כספים מפנסיה", href: "/services/rights/pension-withdrawal" },
+      { label: "פטורי מס פנסיוניים", href: "/services/rights/pension-tax-exemption" },
+      { label: "תביעות ביטוח וביטוח לאומי", href: "/services/rights/insurance-claims" },
+      { label: "הסרת עיקולים", href: "/services/rights/liens-removal" },
+      { label: "איתור כספים", href: "/services/rights/lost-pension-funds" },
     ],
   },
 ];
@@ -72,6 +77,11 @@ export const topicOptions = [
   "מחלות קשות",
   "תכנון פרישה / קרנות השתלמות",
   "תכנון פיננסי / הלוואות",
+  "משיכת כספים",
+  "פטורי מס פנסיוניים",
+  "תביעות ביטוח / ביטוח לאומי",
+  "הסרת עיקולים",
+  "איתור כספים",
   "מיצוי זכויות",
   "כללי / לא בטוח",
 ];

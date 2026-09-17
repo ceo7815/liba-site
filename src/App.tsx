@@ -52,6 +52,10 @@ const LPAthletePage = lazy(() => import("./pages/LPAthletePage"));
 const LPAthleteThankYouPage = lazy(() => import("./pages/LPAthleteThankYouPage"));
 const LPInsuranceCheckPage = lazy(() => import("./pages/LPInsuranceCheckPage"));
 const LPInsuranceCheckThankYouPage = lazy(() => import("./pages/LPInsuranceCheckThankYouPage"));
+const LPPensionCheckPage = lazy(() => import("./pages/LPPensionCheckPage"));
+const LPPensionCheckThankYouPage = lazy(() => import("./pages/LPPensionCheckThankYouPage"));
+const LPLifeDiscountPage = lazy(() => import("./pages/LPLifeDiscountPage"));
+const LPLifeDiscountThankYouPage = lazy(() => import("./pages/LPLifeDiscountThankYouPage"));
 
 const queryClient = new QueryClient();
 
@@ -94,6 +98,10 @@ const App = () => (
             <Route path="/athlete-thankyou" element={<><LPAthleteThankYouPage /><CookieConsent /><AccessibilityWidget /></>} />
             <Route path="/insurance-check" element={<><LPInsuranceCheckPage /><CookieConsent /><AccessibilityWidget /></>} />
             <Route path="/insurance-check/thankyou" element={<><LPInsuranceCheckThankYouPage /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/pension-check" element={<><LPPensionCheckPage /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/pension-check/thank-you" element={<><LPPensionCheckThankYouPage /><CookieConsent /><AccessibilityWidget /></>} />
+            <Route path="/lp/life-discount" element={<><LPLifeDiscountPage /><AccessibilityWidget /></>} />
+            <Route path="/lp/life-discount/thank-you" element={<><LPLifeDiscountThankYouPage /><AccessibilityWidget /></>} />
 
 
             {/* All other pages — with Header/Footer */}

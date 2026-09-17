@@ -23,6 +23,7 @@ interface LeadFormProps {
   showPurpose?: boolean;
   showMessage?: boolean;
   lightTitle?: boolean;
+  thankYouHref?: string;
 }
 
 const WEBHOOK_URL = "https://hook.eu2.make.com/70ude7z5k7ri14i775jow4u1yomfdk4o";
@@ -36,6 +37,7 @@ const LeadForm = ({
   showPurpose = false,
   showMessage = false,
   lightTitle = false,
+  thankYouHref = "/thank-you",
 }: LeadFormProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
@@ -101,7 +103,7 @@ const LeadForm = ({
 
       setSubmitted(true);
       markLeadPending();
-      setTimeout(() => navigate("/thank-you"), 500);
+      setTimeout(() => navigate(thankYouHref), 500);
     } catch (error) {
       console.error("Webhook error:", error);
       toast({

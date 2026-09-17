@@ -34,6 +34,11 @@ const serviceImages: Record<string, { url: string; alt: string }> = {
   "financial-planning": { url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&q=80", alt: "תכנון פיננסי – ניהול תקציב משפחתי" },
   "loans": { url: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80", alt: "הלוואות – ליווי מקצועי במימון" },
   "rights-realization": { url: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1600&q=80", alt: "מיצוי זכויות – בדיקת זכאויות" },
+  "pension-withdrawal": { url: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80", alt: "משיכת כספים מפנסיה – ליווי מול קופות ורשויות" },
+  "pension-tax-exemption": { url: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1600&q=80", alt: "פטורי מס על כספים פנסיוניים – בדיקת זכאות" },
+  "insurance-claims": { url: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&q=80", alt: "תביעות ביטוח וביטוח לאומי – ליווי מקצועי" },
+  "liens-removal": { url: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1600&q=80", alt: "הסרת עיקולים – בדיקה וליווי בהליך" },
+  "lost-pension-funds": { url: "https://images.unsplash.com/photo-1553729459-uj8ax09dUGF?w=1600&q=80", alt: "איתור כספים פנסיוניים וכספי נפטרים" },
 };
 
 const serviceKeywordsMap: Record<string, string[]> = {
@@ -47,6 +52,11 @@ const serviceKeywordsMap: Record<string, string[]> = {
   "financial-planning": ["תכנון פיננסי", "ייעוץ פיננסי", "ניהול תקציב משפחתי", "תכנון פיננסי למשפחות"],
   "loans": ["הלוואה מקרן פנסיה", "הלוואה כנגד חיסכון", "מימון", "הלוואה מביטוח מנהלים"],
   "rights-realization": ["מימוש זכויות", "זכויות ביטוח", "מימוש זכויות רפואיות", "החזרים", "בדיקת זכאות"],
+  "pension-withdrawal": ["משיכת כספים מפנסיה", "משיכת קופת גמל", "משיכת קרן השתלמות", "מס הכנסה משיכה"],
+  "pension-tax-exemption": ["פטור מס פנסיוני", "החזר מס פנסיה", "פטור מס לנכים", "הקלת מס משיכה"],
+  "insurance-claims": ["תביעות ביטוח", "אובדן כושר עבודה", "תביעה לביטוח לאומי", "נכות כללית", "תאונות עבודה"],
+  "liens-removal": ["הסרת עיקולים", "עיקול חשבון בנק", "עיקול פנסיה", "הוצאה לפועל עיקול"],
+  "lost-pension-funds": ["איתור כספים פנסיוניים", "כספי נפטרים", "קופות אבודות", "איתור קרן פנסיה"],
 };
 
 const ServiceDetailPage = () => {

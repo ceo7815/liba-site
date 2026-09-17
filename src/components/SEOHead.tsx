@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 import { siteConfig } from "@/data/siteConfig";
 
 interface BreadcrumbItem {
@@ -38,6 +39,39 @@ interface SEOHeadProps {
 
 const SEOHead = ({ title, description, canonical, keywords, ogImage, ogType = "website", breadcrumbs, faqItems, articleSchema, serviceSchema, noindex }: SEOHeadProps) => {
   const fullCanonical = canonical ? `${siteConfig.domain}${canonical}` : undefined;
+  const image = ogImage || `${siteConfig.domain}/og-liba.webp`;
+
+  useEffect(() => {
+    document.title = title;
+    const setMeta = (attr: "name" | "property", key: string, content: string) => {
+      const sel = attr === "name" ? `meta[name="${key}"]` : `meta[property="${key}"]`;
+      let el = document.head.querySelector(sel) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, key);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+    setMeta("name", "description", description);
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:type", ogType);
+    setMeta("name", "twitter:title", title);
+    setMeta("name", "twitter:description", description);
+    setMeta("property", "og:image", image);
+    setMeta("name", "twitter:image", image);
+    if (fullCanonical) {
+      setMeta("property", "og:url", fullCanonical);
+      let link = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "canonical";
+        document.head.appendChild(link);
+      }
+      link.href = fullCanonical;
+    }
+  }, [title, description, fullCanonical, image, ogType]);
 
   const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     "@context": "https://schema.org",
@@ -122,13 +156,13 @@ const SEOHead = ({ title, description, canonical, keywords, ogImage, ogType = "w
       <meta property="og:description" content={description} />
       <meta property="og:type" content={ogType} />
       {fullCanonical && <meta property="og:url" content={fullCanonical} />}
-      {ogImage && <meta property="og:image" content={ogImage} />}
+      <meta property="og:image" content={image} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      {ogImage && <meta name="twitter:image" content={ogImage} />}
+      <meta name="twitter:image" content={image} />
 
       {/* Structured Data */}
       {breadcrumbSchema && (

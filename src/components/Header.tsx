@@ -10,39 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-const servicesMenu = [
-  {
-    title: "ביטוחים למשפחה",
-    items: [
-      { label: "ביטוח בריאות", href: "/services/family-insurance/health-insurance" },
-      { label: "ביטוח מחלות קשות", href: "/services/family-insurance/critical-illness" },
-      { label: "ביטוח חיים", href: "/services/family-insurance/life-insurance" },
-      { label: "ביטוח משכנתא", href: "/services/family-insurance/mortgage-insurance" },
-      { label: "ביטוח נסיעות לחו״ל", href: "/services/family-insurance/travel-insurance" },
-    ],
-  },
-  {
-    title: "פנסיה ופרישה",
-    items: [
-      { label: "תכנון פרישה", href: "/services/retirement/retirement-planning" },
-      { label: "קרנות השתלמות", href: "/services/retirement/study-fund" },
-    ],
-  },
-  {
-    title: "פיננסי ומימון",
-    items: [
-      { label: "תכנון פיננסי", href: "/services/finance/financial-planning" },
-      { label: "הלוואות", href: "/services/finance/loans" },
-    ],
-  },
-  {
-    title: "זכויות והחזרים",
-    items: [
-      { label: "מיצוי זכויות", href: "/services/rights/rights-realization" },
-    ],
-  },
-];
+import { servicesMenu } from "@/data/siteConfig";
 
 const glassFill =
   "bg-[hsl(var(--popover)/0.96)] backdrop-blur-xl";

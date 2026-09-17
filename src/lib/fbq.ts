@@ -43,12 +43,11 @@ export const trackPageView = (path?: string): void => {
   window.fbq("track", "PageView");
 };
 
-/** Fires `Lead` once per thank-you path per session. */
-export const trackLead = (): void => {
+const fireOnce = (eventName: string, storagePrefix: string): void => {
   if (typeof window === "undefined" || typeof window.fbq !== "function") return;
 
   const path = (typeof location !== "undefined" && location.pathname) || "ty";
-  const key = `${LEAD_PREFIX}${path}`;
+  const key = `${storagePrefix}${path}`;
 
   let existing: string | null = null;
   try { existing = sessionStorage.getItem(key); } catch { /* ignore */ }
@@ -57,5 +56,17 @@ export const trackLead = (): void => {
   const eventId = safeUuid();
   try { sessionStorage.setItem(key, eventId); } catch { /* ignore */ }
 
-  window.fbq("track", "Lead", {}, { eventID: eventId });
+  window.fbq("track", eventName, {}, { eventID: eventId });
+};
+
+/** Fires `Lead` once per thank-you path per session. */
+export const trackLead = (): void => {
+  fireOnce("Lead", LEAD_PREFIX);
+};
+
+const REG_PREFIX = "reg_event_id::";
+
+/** Fires `CompleteRegistration` once per thank-you path per session. */
+export const trackCompleteRegistration = (): void => {
+  fireOnce("CompleteRegistration", REG_PREFIX);
 };

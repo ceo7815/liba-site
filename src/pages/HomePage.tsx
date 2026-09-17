@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Heart, Shield, Home, Plane, Brain, TrendingUp,
   FileSearch, CheckCircle, Star, ArrowLeft, Landmark, Scale,
-  Users, Clock, Award
+  Users, Clock, Award, Coins, Percent, Gavel, Search
 } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import InsuranceLogos from "@/components/InsuranceLogos";
@@ -63,7 +63,7 @@ const HomePage = () => {
         title="בדיקת תיק ביטוח ופנסיה ללא עלות | ליבה ביטוח ופנסיוני"
         description="בדיקת תיק ביטוח ופנסיה ללא עלות. מיפוי כפילויות, פערים וחיסכון אפשרי — מול כל חברות הביטוח. השאירו פרטים לשיחה קצרה ←"
         canonical="/"
-        keywords={["ביטוח", "פנסיה", "תכנון פיננסי", "ביטוח בריאות", "ביטוח חיים", "ביטוח משכנתא", "מיצוי זכויות"]}
+        keywords={["ביטוח", "פנסיה", "תכנון פיננסי", "ביטוח בריאות", "ביטוח חיים", "ביטוח משכנתא", "מיצוי זכויות", "משיכת כספים מפנסיה", "פטור מס פנסיוני"]}
         faqItems={faqs}
       />
 
@@ -211,6 +211,39 @@ const HomePage = () => {
               </motion.div>
             ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-10 md:mt-14 max-w-5xl mx-auto"
+          >
+            <p className="text-center text-primary-foreground/85 text-sm md:text-base mb-6 leading-relaxed">
+              עכשיו בליבה גם מיצוי זכויות: משיכת כספים, פטורי מס, תביעות, הסרת עיקולים ואיתור כספים — ליווי עד שיש תוצאה בפועל.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 [&>*:last-child]:col-span-2 [&>*:last-child]:max-w-[calc(50%-0.375rem)] [&>*:last-child]:justify-self-center md:[&>*:last-child]:col-span-1 md:[&>*:last-child]:max-w-none">
+              {rightsHighlights.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className="glass-dark p-3 md:p-4 flex flex-col items-center text-center gap-2 hover:border-brand-teal/30 transition-all duration-300 group block border border-primary-foreground/10 rounded-2xl w-full"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-gold/25 to-brand-teal/20 text-primary-foreground flex items-center justify-center group-hover:scale-110 transition-transform">
+                    {item.icon}
+                  </div>
+                  <span className="font-heading font-bold text-xs md:text-sm text-primary-foreground group-hover:text-brand-teal transition-colors leading-snug">{item.title}</span>
+                </Link>
+              ))}
+            </div>
+            <div className="flex flex-wrap justify-center gap-4 mt-6">
+              <Link to="/services/rights" className="text-brand-teal text-sm font-medium hover:underline inline-flex items-center gap-1">
+                לכל מיצוי הזכויות <ArrowLeft className="w-3 h-3" />
+              </Link>
+              <Link to="/lp/pension-check" className="text-primary-foreground/70 text-sm font-medium hover:text-brand-teal transition-colors inline-flex items-center gap-1">
+                בדיקת פנסיה לפני משיכה <ArrowLeft className="w-3 h-3" />
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -452,13 +485,21 @@ const services = [
   { icon: <Plane className="w-5 h-5 md:w-6 md:h-6" />, title: "ביטוח נסיעות לחו״ל", desc: "כיסוי נכון לפני טיסה.", href: "/services/family-insurance/travel-insurance" },
   { icon: <TrendingUp className="w-5 h-5 md:w-6 md:h-6" />, title: "תכנון פרישה", desc: "סדר לפני החלטות יקרות.", href: "/services/retirement/retirement-planning" },
   { icon: <Landmark className="w-5 h-5 md:w-6 md:h-6" />, title: "תכנון פיננסי", desc: "סדר בתזרים ובהחלטות.", href: "/services/finance/financial-planning" },
-  { icon: <Scale className="w-5 h-5 md:w-6 md:h-6" />, title: "מיצוי זכויות", desc: "לוודא שלא מפספסים.", href: "/services/rights/rights-realization" },
+  { icon: <Scale className="w-5 h-5 md:w-6 md:h-6" />, title: "מיצוי זכויות", desc: "משיכות, מס, תביעות, עיקולים ואיתור כספים.", href: "/services/rights" },
+];
+
+const rightsHighlights = [
+  { icon: <Coins className="w-4 h-4 md:w-5 md:h-5" />, title: "משיכת כספים", href: "/services/rights/pension-withdrawal" },
+  { icon: <Percent className="w-4 h-4 md:w-5 md:h-5" />, title: "פטורי מס", href: "/services/rights/pension-tax-exemption" },
+  { icon: <Gavel className="w-4 h-4 md:w-5 md:h-5" />, title: "תביעות", href: "/services/rights/insurance-claims" },
+  { icon: <Scale className="w-4 h-4 md:w-5 md:h-5" />, title: "הסרת עיקולים", href: "/services/rights/liens-removal" },
+  { icon: <Search className="w-4 h-4 md:w-5 md:h-5" />, title: "איתור כספים", href: "/services/rights/lost-pension-funds" },
 ];
 
 const aboutPoints = [
   { icon: <CheckCircle className="w-4 h-4" />, title: "שקיפות והסבר פשוט", desc: "אתם מבינים מה יש ולמה." },
   { icon: <Clock className="w-4 h-4" />, title: "בדיקה לפני שינוי", desc: "החלטות על בסיס נתונים." },
-  { icon: <Users className="w-4 h-4" />, title: "גישה רחבה", desc: "ביטוח + פיננסים + פרישה." },
+  { icon: <Users className="w-4 h-4" />, title: "גישה רחבה", desc: "ביטוח + פיננסים + פרישה + זכויות." },
   { icon: <Award className="w-4 h-4" />, title: "ליווי לאורך זמן", desc: "חיים משתנים, התיק מתאים." },
 ];
 
