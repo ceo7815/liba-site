@@ -12,7 +12,7 @@ import { useClarityPageTags } from "@/hooks/useClarityPageTags";
 import logo from "@/assets/logo.png";
 import logoLight from "@/assets/logo-light.png";
 
-const WEBHOOK_URL = "https://hook.eu2.make.com/70ude7z5k7ri14i775jow4u1yomfdk4o";
+const WEBHOOK_URL = "https://hook.eu2.make.com/5qyxhvaox1jtucgeyfv3wdwtc9zqqy8g";
 
 const ATTR_KEYS = [
   "utm_source",
