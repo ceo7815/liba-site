@@ -5,7 +5,7 @@ import { Send, CheckCircle, Loader2 } from "lucide-react";
 import { siteConfig, statusOptions, timeOptions, topicOptions, purposeOptions, servicesMenu } from "@/data/siteConfig";
 import { useToast } from "@/hooks/use-toast";
 import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
-import { markLeadPending } from "@/lib/fbq";
+import { splitFullName, trackLead } from "@/lib/fbq";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
 import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 
@@ -75,8 +75,14 @@ const LeadForm = ({
       return;
     }
 
+    const fullName = formData.name.trim();
+    const { fn, ln } = splitFullName(fullName);
     const payload = {
-      lead_full_name: formData.name.trim(),
+      lead_full_name: fullName,
+      lead_first_name: fn,
+      lead_last_name: ln,
+      first_name: fn,
+      last_name: ln,
       lead_phone_number: normalizeIsraeliPhone(formData.phone),
       lead_age: formData.age ? Number(formData.age) : null,
       lead_marital_status: formData.status,
@@ -102,7 +108,10 @@ const LeadForm = ({
       await postLeadWebhooks(WEBHOOK_URL, verifiedPayload);
 
       setSubmitted(true);
-      markLeadPending();
+      trackLead(
+        { ph: verifiedPayload.lead_phone_number, fn, ln },
+        [source, thankYouHref],
+      );
       setTimeout(() => navigate(thankYouHref), 500);
     } catch (error) {
       console.error("Webhook error:", error);
