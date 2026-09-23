@@ -18,7 +18,7 @@ const LPLifeDiscountThankYouPage = () => {
   useClarityPageTags({ pageType: "landing-page", lpCampaign: LIFE_DISCOUNT_LP.campaign, funnelStep: "thank-you" });
 
   useEffect(() => {
-    trackLead();
+    trackLead(undefined, [LIFE_DISCOUNT_LP.path, LIFE_DISCOUNT_LP.thankYouPath, LIFE_DISCOUNT_LP.campaign]);
     setClarityTag("lead_campaign", LIFE_DISCOUNT_LP.campaign);
     trackClarityEvent("lead_submitted");
   }, []);

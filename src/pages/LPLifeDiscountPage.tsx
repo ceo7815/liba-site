@@ -8,6 +8,7 @@ import { LIFE_DISCOUNT_LP, lifeDiscountFaqs } from "@/data/lifeDiscountLp";
 import { useToast } from "@/hooks/use-toast";
 import { isValidIsraeliMobile, MOBILE_PHONE_ERROR, normalizeIsraeliPhone } from "@/lib/validators/israeliPhone";
 import { backupLead, postLeadWebhooks } from "@/lib/leadsBackup";
+import { splitFullName, trackLead } from "@/lib/fbq";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
 import logo from "@/assets/logo.png";
 import logoLight from "@/assets/logo-light.png";
@@ -138,13 +139,19 @@ const LPLifeDiscountPage = () => {
     if (!form.consent) return;
 
     const attr = collectAttribution();
+    const fullName = form.name.trim();
+    const { fn, ln } = splitFullName(fullName);
     const payload = {
-      name: form.name.trim(),
+      name: fullName,
       phone: normalizeIsraeliPhone(form.phone),
       age: form.age ? Number(form.age) : null,
       has_life_insurance: form.hasLife,
       has_mortgage: form.hasMortgage,
-      lead_full_name: form.name.trim(),
+      lead_full_name: fullName,
+      lead_first_name: fn,
+      lead_last_name: ln,
+      first_name: fn,
+      last_name: ln,
       lead_phone_number: normalizeIsraeliPhone(form.phone),
       lead_age: form.age ? Number(form.age) : null,
       lead_has_life_insurance: form.hasLife,
@@ -166,6 +173,10 @@ const LPLifeDiscountPage = () => {
     try {
       await backupLead(LIFE_DISCOUNT_LP.source, payload);
       await postLeadWebhooks(WEBHOOK_URL, payload);
+      trackLead(
+        { ph: payload.lead_phone_number, fn, ln },
+        [LIFE_DISCOUNT_LP.path, LIFE_DISCOUNT_LP.thankYouPath, LIFE_DISCOUNT_LP.campaign],
+      );
       navigate(LIFE_DISCOUNT_LP.thankYouPath);
     } catch (error) {
       console.error("Webhook error:", error);
