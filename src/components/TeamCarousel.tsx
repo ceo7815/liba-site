@@ -21,7 +21,6 @@ import simona from "@/assets/team/simona.png";
 import nadav from "@/assets/team/nadav.png";
 import daniel from "@/assets/team/daniel.png";
 import mashi from "@/assets/team/mashi.png";
-import nivLevran from "@/assets/team/niv-levran.png";
 import doron from "@/assets/team/doron.png";
 
 type Member = { name: string; role: string; img: string };
@@ -38,7 +37,6 @@ const team: Member[] = [
   { name: "נדב לוי", role: "מנהל מחלקת מיצוי זכויות", img: nadav },
   { name: "דורון שושני", role: "מנהל תיק לקוחות ומיצוי זכויות", img: doron },
   { name: "ניב קובי", role: "מנהל תיק לקוחות", img: nivKobi },
-  { name: "ניב לב רן", role: "מנהל תיק לקוחות", img: nivLevran },
   { name: "דניאל כהן", role: "מנהל תיק לקוחות", img: daniel },
   { name: "סימונה ויינר", role: "מנהלת תיק לקוחות", img: simona },
 ];
