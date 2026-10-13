@@ -3,8 +3,6 @@
 // Runs alongside the existing Make webhook so nothing is lost if the webhook/automation fails.
 // In local `npm run dev`, neither Make nor the live leads table is touched.
 
-import { supabase } from "@/integrations/supabase/client";
-
 type UnknownRecord = Record<string, unknown>;
 
 const isLivePipeline = import.meta.env.PROD;
@@ -102,6 +100,7 @@ export const backupLead = async (
     const referrer = typeof document !== "undefined" && document.referrer ? document.referrer.slice(0, 500) : null;
     const user_agent = typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null;
 
+    const { supabase } = await import("@/integrations/supabase/client");
     const { error } = await supabase.from("website_leads").insert({
       source: source.slice(0, 80),
       full_name: full_name?.slice(0, 200) ?? null,
