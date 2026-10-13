@@ -64,16 +64,18 @@ describe("life discount form", () => {
     expect(backupLead).toHaveBeenCalledTimes(1);
     expect(postLeadWebhooks).toHaveBeenCalledTimes(1);
     expect(vi.mocked(postLeadWebhooks).mock.calls[0][0]).toBe(LIFE_DISCOUNT_WEBHOOK_URL);
-    expect(vi.mocked(postLeadWebhooks).mock.calls[0][1]).toMatchObject({
+    const sent = vi.mocked(postLeadWebhooks).mock.calls[0][1] as Record<string, unknown>;
+    expect(sent).toMatchObject({
       name: "דנה לוי",
       phone: "0521112233",
-      age: null,
-      has_life_insurance: "",
-      has_mortgage: "",
-      lead_has_life_insurance: "",
-      lead_has_mortgage: "",
-      inquiry_message: "ביטוח חיים:  | משכנתא: ",
+      lead_full_name: "דנה לוי",
+      lead_phone_number: "0521112233",
     });
+    expect(sent).not.toHaveProperty("age");
+    expect(sent).not.toHaveProperty("inquiry_message");
+    expect(sent).not.toHaveProperty("has_life_insurance");
+    expect(sent.meta_submitted_at).toEqual(expect.any(String));
+    expect(sent.meta_page_url).toEqual(expect.any(String));
 
     const leads = vi.mocked(window.fbq!).mock.calls.filter((call) => call[0] === "track" && call[1] === "Lead");
     expect(leads).toHaveLength(1);

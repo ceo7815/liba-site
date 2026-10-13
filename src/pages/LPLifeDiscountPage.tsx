@@ -16,7 +16,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { isValidIsraeliMobile, MOBILE_PHONE_ERROR } from "@/lib/validators/israeliPhone";
 import { buildLifeDiscountPayload, parseOptionalAge } from "@/lib/lifeDiscountLead";
-import { trackLead } from "@/lib/fbq";
+import { splitFullName, trackLead } from "@/lib/fbq";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
 import logo from "@/assets/logo-liba-sm.webp";
 import logoLight from "@/assets/logo-liba-light-sm.webp";
@@ -202,8 +202,9 @@ const LPLifeDiscountPage = () => {
       if (!leadSent.current) {
         leadSent.current = true;
         try {
+          const { fn, ln } = splitFullName(form.name);
           trackLead(
-            { ph: payload.lead_phone_number, fn: payload.lead_first_name, ln: payload.lead_last_name },
+            { ph: String(payload.lead_phone_number), fn, ln },
             [LIFE_DISCOUNT_LP.path, LIFE_DISCOUNT_LP.thankYouPath, LIFE_DISCOUNT_LP.campaign],
           );
         } catch (pixelError) {

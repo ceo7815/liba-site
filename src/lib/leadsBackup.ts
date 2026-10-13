@@ -13,6 +13,7 @@ export type WebhookDelivery = { ok: boolean };
  * Dispatch lead payloads to Make.
  * `ok` means the browser accepted the request. The webhook is `no-cors`,
  * so an HTTP error from Make cannot be read — only a network failure is `ok: false`.
+ * no-cors also rewrites Content-Type: application/json to text/plain; the body stays JSON.
  * Local `npm run dev` never calls Make and returns `ok: true` so the UI can be tested.
  */
 export const postLeadWebhooks = async (
