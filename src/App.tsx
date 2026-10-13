@@ -3,11 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import CookieConsent from "@/components/CookieConsent";
 import AccessibilityWidget from "@/components/AccessibilityWidget";
-import SocialButtons from "@/components/SocialButtons";
 import ScrollToTop from "@/components/ScrollToTop";
 import { lazy, Suspense, useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -56,6 +52,10 @@ const LPPensionCheckPage = lazy(() => import("./pages/LPPensionCheckPage"));
 const LPPensionCheckThankYouPage = lazy(() => import("./pages/LPPensionCheckThankYouPage"));
 const LPLifeDiscountPage = lazy(() => import("./pages/LPLifeDiscountPage"));
 const LPLifeDiscountThankYouPage = lazy(() => import("./pages/LPLifeDiscountThankYouPage"));
+const Header = lazy(() => import("./components/Header"));
+const Footer = lazy(() => import("./components/Footer"));
+const CookieConsent = lazy(() => import("./components/CookieConsent"));
+const SocialButtons = lazy(() => import("./components/SocialButtons"));
 
 const queryClient = new QueryClient();
 

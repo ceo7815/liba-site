@@ -1,11 +1,11 @@
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import path from "path";
 import type { Plugin } from "vite";
+import { LIFE_DISCOUNT_LP } from "./src/data/lifeDiscountLp";
 
-const TITLE = "יש לכם ביטוח חיים? בדקו אם ההנחה זמנית | ליבה";
-const DESCRIPTION =
-  "בדיקת הנחות בביטוח חיים ללא עלות וללא התחייבות. טיוטת רשות שוק ההון טרם בתוקף. נציג מליבה חוזר אליכם.";
-const URL = "https://liba-fs.co.il/lp/life-discount";
+const TITLE = LIFE_DISCOUNT_LP.title;
+const DESCRIPTION = LIFE_DISCOUNT_LP.description;
+const URL = `https://liba-fs.co.il${LIFE_DISCOUNT_LP.path}`;
 const IMAGE = "https://liba-fs.co.il/og-liba.webp";
 
 /** Facebook's crawler does not run JS. Serve static OG tags for this LP path. */

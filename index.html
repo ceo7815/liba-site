@@ -9,6 +9,15 @@
     <link rel="dns-prefetch" href="https://images.unsplash.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" />
+    </noscript>
     <link rel="preconnect" href="https://www.clarity.ms" />
     <link rel="preconnect" href="https://connect.facebook.net" />
 
@@ -92,15 +101,21 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
 
-  <!-- Meta Pixel Code -->
+  <!-- Meta Pixel Code. Stub is sync so Lead/PageView queue immediately.
+       fbevents.js itself waits for idle so it does not compete with first paint. -->
   <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
+    n.queue=[];
+    function load(){if(f.__libaFbqScript)return;f.__libaFbqScript=1;
+    t=b.createElement(e);t.async=!0;t.fetchPriority='low';
     t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    s.parentNode.insertBefore(t,s)}
+    if(f.requestIdleCallback)f.requestIdleCallback(load,{timeout:2500});
+    else f.addEventListener('load',load);
+    }(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '2065359334053610');
     fbq('init', '1514737380266105');

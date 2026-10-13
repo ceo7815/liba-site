@@ -9,17 +9,26 @@ type UnknownRecord = Record<string, unknown>;
 
 const isLivePipeline = import.meta.env.PROD;
 
+export type WebhookDelivery = { ok: boolean };
+
+/**
+ * Dispatch lead payloads to Make.
+ * `ok` means the browser accepted the request. The webhook is `no-cors`,
+ * so an HTTP error from Make cannot be read — only a network failure is `ok: false`.
+ * Local `npm run dev` never calls Make and returns `ok: true` so the UI can be tested.
+ */
 export const postLeadWebhooks = async (
   urls: string | string[],
   payload: unknown,
-): Promise<void> => {
-  const list = Array.isArray(urls) ? urls : [urls];
+): Promise<WebhookDelivery> => {
+  const list = (Array.isArray(urls) ? urls : [urls]).filter(Boolean);
   if (!isLivePipeline) {
     console.info("[local] skipped Make webhooks to protect live automations:", list);
-    return;
+    return { ok: true };
   }
+  if (list.length === 0) return { ok: false };
   const body = JSON.stringify(payload);
-  await Promise.allSettled(
+  const results = await Promise.allSettled(
     list.map((url) =>
       fetch(url, {
         method: "POST",
@@ -29,6 +38,7 @@ export const postLeadWebhooks = async (
       }),
     ),
   );
+  return { ok: results.some((result) => result.status === "fulfilled") };
 };
 
 const pickString = (obj: UnknownRecord, keys: string[]): string | undefined => {
