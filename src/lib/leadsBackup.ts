@@ -3,23 +3,31 @@
 // Runs alongside the existing Make webhook so nothing is lost if the webhook/automation fails.
 // In local `npm run dev`, neither Make nor the live leads table is touched.
 
-import { supabase } from "@/integrations/supabase/client";
-
 type UnknownRecord = Record<string, unknown>;
 
 const isLivePipeline = import.meta.env.PROD;
 
+export type WebhookDelivery = { ok: boolean };
+
+/**
+ * Dispatch lead payloads to Make.
+ * `ok` means the browser accepted the request. The webhook is `no-cors`,
+ * so an HTTP error from Make cannot be read — only a network failure is `ok: false`.
+ * no-cors also rewrites Content-Type: application/json to text/plain; the body stays JSON.
+ * Local `npm run dev` never calls Make and returns `ok: true` so the UI can be tested.
+ */
 export const postLeadWebhooks = async (
   urls: string | string[],
   payload: unknown,
-): Promise<void> => {
-  const list = Array.isArray(urls) ? urls : [urls];
+): Promise<WebhookDelivery> => {
+  const list = (Array.isArray(urls) ? urls : [urls]).filter(Boolean);
   if (!isLivePipeline) {
     console.info("[local] skipped Make webhooks to protect live automations:", list);
-    return;
+    return { ok: true };
   }
+  if (list.length === 0) return { ok: false };
   const body = JSON.stringify(payload);
-  await Promise.allSettled(
+  const results = await Promise.allSettled(
     list.map((url) =>
       fetch(url, {
         method: "POST",
@@ -29,6 +37,7 @@ export const postLeadWebhooks = async (
       }),
     ),
   );
+  return { ok: results.some((result) => result.status === "fulfilled") };
 };
 
 const pickString = (obj: UnknownRecord, keys: string[]): string | undefined => {
@@ -92,6 +101,7 @@ export const backupLead = async (
     const referrer = typeof document !== "undefined" && document.referrer ? document.referrer.slice(0, 500) : null;
     const user_agent = typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null;
 
+    const { supabase } = await import("@/integrations/supabase/client");
     const { error } = await supabase.from("website_leads").insert({
       source: source.slice(0, 80),
       full_name: full_name?.slice(0, 200) ?? null,

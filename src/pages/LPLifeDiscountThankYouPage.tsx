@@ -4,21 +4,32 @@ import { motion } from "framer-motion";
 import { CheckCircle, MessageCircle, Phone } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { siteConfig } from "@/data/siteConfig";
-import { LIFE_DISCOUNT_LP } from "@/data/lifeDiscountLp";
-import { trackLead } from "@/lib/fbq";
+import {
+  LIFE_DISCOUNT_LP,
+  LIFE_DISCOUNT_SUBMITTED_KEY,
+  lifeDiscountPhoneDisplay,
+  lifeDiscountTelHref,
+  lifeDiscountWhatsAppHref,
+} from "@/data/lifeDiscountLp";
 import { trackClarityEvent, setClarityTag } from "@/lib/clarity";
 import { useClarityPageTags } from "@/hooks/useClarityPageTags";
-import logo from "@/assets/logo.png";
-import logoLight from "@/assets/logo-light.png";
+import logo from "@/assets/logo-liba-sm.webp";
+import logoLight from "@/assets/logo-liba-light-sm.webp";
 
-const telHref = `tel:${siteConfig.phones[0].replace(/-/g, "")}`;
-const waHref = `https://wa.me/972${siteConfig.whatsapp.replace(/^0/, "")}`;
+const CLARITY_FIRED_KEY = "liba_life_discount_clarity_fired";
 
 const LPLifeDiscountThankYouPage = () => {
   useClarityPageTags({ pageType: "landing-page", lpCampaign: LIFE_DISCOUNT_LP.campaign, funnelStep: "thank-you" });
 
   useEffect(() => {
-    trackLead(undefined, [LIFE_DISCOUNT_LP.path, LIFE_DISCOUNT_LP.thankYouPath, LIFE_DISCOUNT_LP.campaign]);
+    // Lead pixel fires once in the form, only after delivery. Do not fire it here.
+    try {
+      if (sessionStorage.getItem(LIFE_DISCOUNT_SUBMITTED_KEY) !== "1") return;
+      if (sessionStorage.getItem(CLARITY_FIRED_KEY) === "1") return;
+      sessionStorage.setItem(CLARITY_FIRED_KEY, "1");
+    } catch {
+      return;
+    }
     setClarityTag("lead_campaign", LIFE_DISCOUNT_LP.campaign);
     trackClarityEvent("lead_submitted");
   }, []);
@@ -53,7 +64,7 @@ const LPLifeDiscountThankYouPage = () => {
 
         <div className="grid sm:grid-cols-2 gap-3">
           <a
-            href={waHref}
+            href={lifeDiscountWhatsAppHref}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 min-h-[48px] rounded-full border border-border bg-card font-semibold text-sm hover:border-brand-teal/40 transition-colors"
@@ -62,11 +73,11 @@ const LPLifeDiscountThankYouPage = () => {
             וואטסאפ
           </a>
           <a
-            href={telHref}
+            href={lifeDiscountTelHref}
             className="inline-flex items-center justify-center gap-2 min-h-[48px] rounded-full border border-border bg-card font-semibold text-sm hover:border-brand-teal/40 transition-colors"
           >
             <Phone className="w-4 h-4 text-brand-teal" />
-            התקשרו · <span dir="ltr">{siteConfig.phones[0]}</span>
+            התקשרו · <span dir="ltr">{lifeDiscountPhoneDisplay}</span>
           </a>
         </div>
       </div>
@@ -77,8 +88,8 @@ const LPLifeDiscountThankYouPage = () => {
           <img src={logoLight} alt={`לוגו ${siteConfig.name}`} className="h-9 mx-auto opacity-80" loading="lazy" />
           <p className="text-primary-foreground/70 text-sm">
             {siteConfig.name} ·{" "}
-            <a href={telHref} className="hover:text-primary-foreground" dir="ltr">
-              {siteConfig.phones[0]}
+            <a href={lifeDiscountTelHref} className="hover:text-primary-foreground" dir="ltr">
+              {lifeDiscountPhoneDisplay}
             </a>
           </p>
           <div className="flex items-center justify-center gap-4 text-primary-foreground/50 text-sm">
