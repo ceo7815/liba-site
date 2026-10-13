@@ -70,6 +70,9 @@ describe("life discount form", () => {
       age: null,
       has_life_insurance: "",
       has_mortgage: "",
+      lead_has_life_insurance: "",
+      lead_has_mortgage: "",
+      inquiry_message: "ביטוח חיים:  | משכנתא: ",
     });
 
     const leads = vi.mocked(window.fbq!).mock.calls.filter((call) => call[0] === "track" && call[1] === "Lead");

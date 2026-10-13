@@ -39,6 +39,39 @@ describe("buildLifeDiscountPayload", () => {
       meta_campaign: "life-discount",
       utm_source: "fb",
     });
-    expect(payload.inquiry_message).toContain("גיל: לא צוין");
+    expect(payload.inquiry_message).toBe("ביטוח חיים:  | משכנתא: ");
+    expect(Object.keys(payload)).toEqual([
+      "name",
+      "phone",
+      "age",
+      "has_life_insurance",
+      "has_mortgage",
+      "lead_full_name",
+      "lead_first_name",
+      "lead_last_name",
+      "first_name",
+      "last_name",
+      "lead_phone_number",
+      "lead_age",
+      "lead_has_life_insurance",
+      "lead_has_mortgage",
+      "inquiry_service_area",
+      "inquiry_message",
+      "meta_source_page",
+      "meta_campaign_type",
+      "meta_campaign",
+      "meta_marketing_consent",
+      "meta_contact_consent",
+      "meta_locale",
+      "meta_page_url",
+      "meta_submitted_at",
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_term",
+      "utm_content",
+      "gclid",
+      "fbclid",
+    ]);
   });
 });

@@ -26,13 +26,15 @@ export const buildLifeDiscountPayload = (input: {
   const fullName = input.name.trim();
   const { fn, ln } = splitFullName(fullName);
   const phone = normalizeIsraeliPhone(input.phone);
-  const ageNote = input.age == null ? "לא צוין" : String(input.age);
+  // Removed questions stay on the Make payload as empty strings. Do not rename keys.
+  const hasLife = "";
+  const hasMortgage = "";
   return {
     name: fullName,
     phone,
     age: input.age,
-    has_life_insurance: "",
-    has_mortgage: "",
+    has_life_insurance: hasLife,
+    has_mortgage: hasMortgage,
     lead_full_name: fullName,
     lead_first_name: fn,
     lead_last_name: ln,
@@ -40,10 +42,10 @@ export const buildLifeDiscountPayload = (input: {
     last_name: ln,
     lead_phone_number: phone,
     lead_age: input.age,
-    lead_has_life_insurance: "",
-    lead_has_mortgage: "",
+    lead_has_life_insurance: hasLife,
+    lead_has_mortgage: hasMortgage,
     inquiry_service_area: "ביטוח חיים",
-    inquiry_message: `ביטוח חיים: לא צוין | משכנתא: לא צוין | גיל: ${ageNote}`,
+    inquiry_message: `ביטוח חיים: ${hasLife} | משכנתא: ${hasMortgage}`,
     meta_source_page: LIFE_DISCOUNT_LP.source,
     meta_campaign_type: "facebook-instagram",
     meta_campaign: LIFE_DISCOUNT_LP.campaign,
